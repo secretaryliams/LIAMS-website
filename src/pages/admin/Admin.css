@@ -354,6 +354,73 @@
   color: var(--text-muted);
 }
 
+.forgot-password-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--blue);
+  cursor: pointer;
+  text-align: left;
+  font-weight: 600;
+}
+
+.forgot-password-btn:hover {
+  text-decoration: underline;
+}
+
+.forgot-password-form__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.reset-password-page {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1rem;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.reset-password-card {
+  width: 100%;
+  max-width: 420px;
+  margin: 2rem auto 4rem;
+}
+
+.reset-password-card h2 {
+  margin-bottom: 0.5rem;
+}
+
+.reset-password-card__hint {
+  margin-bottom: 0.25rem;
+  font-size: 0.95rem;
+}
+
+.reset-password-card .admin-form {
+  margin-bottom: 0;
+}
+
+@media (max-width: 480px) {
+  .reset-password-page {
+    padding: 1.25rem 0.75rem;
+  }
+
+  .reset-password-card,
+  .admin-card--narrow {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.25rem;
+  }
+
+  .admin-form input,
+  .reset-password-card input {
+    font-size: 16px;
+  }
+}
+
 @media (max-width: 640px) {
   .admin-dashboard__grid {
     grid-template-columns: 1fr;
