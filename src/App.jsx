@@ -9,7 +9,6 @@ import Collaborations from './pages/Collaborations';
 import Contact from './pages/Contact';
 import ProtectedRoute from './routes/ProtectedRoute';
 import Login from './pages/admin/Login';
-import ResetPassword from './pages/ResetPassword';
 import AdminLayout from './pages/admin/AdminLayout';
 import Dashboard from './pages/admin/Dashboard';
 import Announcements from './pages/admin/Announcements';
@@ -34,7 +33,6 @@ export default function App() {
         </Route>
 
         <Route path="/admin/login" element={<Login />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/admin" element={<ProtectedRoute />}>
           <Route element={<AdminLayout />}>
             <Route index element={<Dashboard />} />

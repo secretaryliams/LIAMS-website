@@ -56,15 +56,6 @@ Add storage policies in the dashboard (or uncomment the SQL block at the bottom 
 
 **Authentication → Users → Add user** (e.g. admin email + password).
 
-### Password reset (production)
-
-1. **SQL Editor** → run `supabase/migrations/add_admin_email_check.sql` (verifies only registered auth emails can request a reset).
-2. **Authentication → URL Configuration**:
-   - **Site URL**: `https://liams.in`
-   - **Redirect URLs**: `https://liams.in/reset-password`
-3. Reset links expire per Supabase auth settings (default ~1 hour). Expired links show *Reset link expired. Please request again.*
-4. Deploy with `vercel.json` SPA rewrites so `/reset-password` loads the React app from email links.
-
 ## 6. Admin panel
 
 | URL | Purpose |

@@ -1,13 +1,7 @@
 import PageHero from '../components/PageHero';
 import Reveal from '../components/motion/Reveal';
 import StaggerGrid from '../components/motion/StaggerGrid';
-import {
-  vision,
-  mission,
-  objectives,
-  leadership,
-  advisoryBoard,
-} from '../data/siteData';
+import { objectives, leadership, advisoryBoard } from '../data/siteData';
 import './About.css';
 
 export default function About() {
@@ -20,25 +14,6 @@ export default function About() {
       />
 
       <section className="section">
-        <div className="container">
-          <Reveal className="section__header">
-            <span className="section__label">Purpose</span>
-            <h2>Vision & Mission</h2>
-          </Reveal>
-          <StaggerGrid className="vision-mission grid grid--2">
-            <article className="intro-card">
-              <h3>Our Vision</h3>
-              <p>{vision}</p>
-            </article>
-            <article className="intro-card intro-card--gold">
-              <h3>Our Mission</h3>
-              <p>{mission}</p>
-            </article>
-          </StaggerGrid>
-        </div>
-      </section>
-
-      <section className="section section--alt">
         <div className="container about-split">
           <Reveal>
             <span className="section__label">Institute</span>

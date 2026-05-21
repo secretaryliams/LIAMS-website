@@ -4,6 +4,8 @@ import Reveal from './motion/Reveal';
 import { useUpcomingEvents } from '../hooks/usePublicContent';
 import './EventsTicker.css';
 
+const EVENT_TAGS = ['Conferences', 'Symposia', 'Training'];
+
 function EventCard({ event }) {
   return (
     <article className="event-ticker__card">
@@ -14,8 +16,19 @@ function EventCard({ event }) {
       </div>
       <div className="event-ticker__body">
         <h3>{event.title}</h3>
-        <p className="event-ticker__meta">{event.venue}</p>
-        <p>{event.description}</p>
+        <p className="event-ticker__meta">
+          {event.dateLabel} · {event.venue}
+        </p>
+        {event.form_link && (
+          <a
+            href={event.form_link}
+            className="event-ticker__link"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Register →
+          </a>
+        )}
       </div>
     </article>
   );
@@ -24,17 +37,43 @@ function EventCard({ event }) {
 export default function EventsTicker() {
   const { events, loading } = useUpcomingEvents();
   const items = events.length ? [...events, ...events] : [];
+  const nextEvent = events[0];
 
   return (
     <section className="events-ticker-section section--alt">
       <div className="container events-ticker-section__layout">
         <Reveal className="events-ticker-section__intro">
-          <span className="section__label">Upcoming</span>
-          <h2>Events</h2>
-          <p>
-            Conferences, symposia, and training programmes — stay updated with the latest at LIAMS.
-          </p>
-          <Link to="/events" className="btn btn--secondary">
+          <div className="events-ticker-section__intro-top">
+            <span className="section__label">Upcoming</span>
+            <h2>Events</h2>
+            <p className="events-ticker-section__lead">
+              Stay updated with conferences and programmes at LIAMS.
+            </p>
+            <ul className="events-ticker-section__tags" aria-label="Event types">
+              {EVENT_TAGS.map((tag) => (
+                <li key={tag}>{tag}</li>
+              ))}
+            </ul>
+          </div>
+
+          {!loading && events.length > 0 && (
+            <div className="events-ticker-section__spotlight">
+              <span className="events-ticker-section__spotlight-label">Next up</span>
+              <p className="events-ticker-section__spotlight-title">{nextEvent.title}</p>
+              <p className="events-ticker-section__spotlight-meta">{nextEvent.dateLabel}</p>
+              <span className="events-ticker-section__count">
+                {events.length} scheduled
+              </span>
+            </div>
+          )}
+
+          {!loading && events.length === 0 && (
+            <p className="events-ticker-section__empty-note">
+              No events listed yet. Visit the Events page for updates.
+            </p>
+          )}
+
+          <Link to="/events" className="btn btn--secondary events-ticker-section__cta">
             View All Events
           </Link>
         </Reveal>
@@ -43,12 +82,20 @@ export default function EventsTicker() {
           {loading ? (
             <p className="events-ticker__status">Loading events…</p>
           ) : events.length === 0 ? (
-            <EmptyState message="No upcoming events" />
+            <div className="events-ticker events-ticker--empty">
+              <EmptyState message="No upcoming events" />
+              <Link to="/events" className="btn btn--primary events-ticker__empty-cta">
+                Go to Events
+              </Link>
+            </div>
           ) : (
             <div className="events-ticker" aria-label="Upcoming events scrolling list">
               <div className="events-ticker__fade events-ticker__fade--top" aria-hidden="true" />
               <div className="events-ticker__viewport">
-                <div className="events-ticker__track">
+                <div
+                  className="events-ticker__track"
+                  style={{ '--ticker-duration': `${Math.max(18, events.length * 6)}s` }}
+                >
                   {items.map((event, index) => (
                     <EventCard key={`${event.id}-${index}`} event={event} />
                   ))}
