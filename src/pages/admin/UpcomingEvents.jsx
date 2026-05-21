@@ -102,7 +102,14 @@ export default function UpcomingEvents() {
               className={`admin-list__item${row.enabled ? '' : ' admin-list__item--disabled'}`}
             >
               <div>
-                <strong>{row.title}</strong>
+                <div className="admin-list__title-row">
+                  <strong>{row.title}</strong>
+                  <span
+                    className={`admin-status-badge${row.enabled ? ' admin-status-badge--live' : ' admin-status-badge--hidden'}`}
+                  >
+                    {row.enabled ? 'Published' : 'Disabled'}
+                  </span>
+                </div>
                 <p className="admin-muted">
                   {formatEventDateLabel(row.event_date)}
                   {' · '}
@@ -121,7 +128,7 @@ export default function UpcomingEvents() {
               <div className="admin-actions">
                 <button
                   type="button"
-                  className="btn btn--outline"
+                  className={`btn ${row.enabled ? 'btn--toggle-disable' : 'btn--toggle-enable'}`}
                   onClick={() => handleToggle(row.id, row.enabled)}
                 >
                   {row.enabled ? 'Disable' : 'Enable'}

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { institute, coreServices } from '../data/siteData';
+import { institute, coreServices, vision, mission } from '../data/siteData';
 import AnnouncementStrip from '../components/AnnouncementStrip';
 import CertificatesFloatingButton from '../components/CertificatesFloatingButton';
 import EventsTicker from '../components/EventsTicker';
@@ -58,15 +58,19 @@ export default function Home() {
       <section className="section">
         <div className="container">
           <Reveal className="section__header">
-            <span className="section__label">Introduction</span>
-            <h2>Welcome to the Loyola Institute of Advanced Multidisciplinary Studies</h2>
-            <p>
-              We are a dynamic academic and research ecosystem designed to bridge the gap
-              between academia and industry. By integrating modern technological trends with
-              rigorous academic frameworks, we provide comprehensive support for students,
-              scholars, and academicians globally.
-            </p>
+            <span className="section__label">Purpose</span>
+            <h2>Vision & Mission</h2>
           </Reveal>
+          <StaggerGrid className="vision-mission grid grid--2">
+            <article className="intro-card">
+              <h3>Our Vision</h3>
+              <p>{vision}</p>
+            </article>
+            <article className="intro-card intro-card--gold">
+              <h3>Our Mission</h3>
+              <p>{mission}</p>
+            </article>
+          </StaggerGrid>
         </div>
       </section>
 

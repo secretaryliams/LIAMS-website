@@ -33,7 +33,7 @@ export default function AdminLayout() {
             ))}
           </nav>
           <div className="admin-actions">
-            <Link to="/" className="btn btn--outline">
+            <Link to="/" className="btn btn--view-site">
               View site
             </Link>
             <button type="button" className="btn btn--navy" onClick={handleSignOut}>
