@@ -61,6 +61,15 @@
   margin: 0 auto;
 }
 
+.event-card__image {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
 @media (max-width: 720px) {
   .events-search {
     max-width: 100%;

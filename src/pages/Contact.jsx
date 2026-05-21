@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import PageHero from '../components/PageHero';
 import Reveal from '../components/motion/Reveal';
+import SocialIcons from '../components/SocialIcons';
 import { institute } from '../data/siteData';
 import './Contact.css';
 
@@ -16,15 +17,17 @@ export default function Contact() {
   return (
     <>
       <PageHero
-        label="Contact"
+        label="Contact Us"
         title="Contact Us"
-        subtitle="Reach out for partnerships, training, research support, or general enquiries."
+        subtitle="Connect With Us to Advance Your Academic Journey"
       />
 
       <section className="section">
         <div className="container contact-grid">
           <Reveal className="contact-info card">
+            <div id="get-in-touch" />
             <h2>Get in Touch</h2>
+            <p>Reach out for partnerships, training, research support, or general enquiries.</p>
             <dl className="contact-details">
               <div>
                 <dt>Address</dt>
@@ -47,9 +50,30 @@ export default function Contact() {
                 <dd>{contact.hours}</dd>
               </div>
             </dl>
+            <div className="contact-social">
+              <h3>Social Media Links</h3>
+              <SocialIcons />
+              <p className="contact-social__note">
+                Join our WhatsApp group invite and Telegram channel for updates (links configured in
+                site settings).
+              </p>
+            </div>
+            <div className="contact-qr">
+              <img
+                src="/images/contact-qr.png"
+                alt="QR code to contact LIAMS"
+                className="contact-qr__image"
+                onError={(e) => {
+                  e.currentTarget.closest('.contact-qr').classList.add('contact-qr--placeholder');
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+              <p className="contact-qr__caption">Scan to connect with LIAMS</p>
+            </div>
           </Reveal>
 
           <Reveal delay={0.08} className="contact-form card">
+            <div id="send-message" />
             <form onSubmit={handleSubmit}>
               <h2>Send a Message</h2>
               {submitted ? (

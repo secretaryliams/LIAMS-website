@@ -12,6 +12,7 @@ function mapUpcomingEvent(row) {
       ? 'Registration / submission link available.'
       : 'Details coming soon.',
     form_link: row.form_link,
+    image_url: row.image_url,
     event_date: row.event_date,
     ...parts,
     dateLabel: formatEventDateLabel(row.event_date),

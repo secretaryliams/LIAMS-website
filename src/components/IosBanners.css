@@ -1,0 +1,66 @@
+.ios-banners {
+  padding: 0.85rem 0 1.25rem;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.ios-banners__track {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.25rem;
+  scrollbar-width: thin;
+}
+
+.ios-banners__card {
+  flex: 0 0 min(280px, 78vw);
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+  color: var(--white);
+  box-shadow: var(--shadow);
+  min-height: 108px;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.ios-banners__card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  color: var(--white);
+}
+
+.ios-banners__card--navy {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+}
+
+.ios-banners__card--gold {
+  background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 100%);
+  color: var(--ink);
+}
+
+.ios-banners__card--mint {
+  background: linear-gradient(135deg, var(--mint-dark) 0%, var(--mint) 100%);
+}
+
+.ios-banners__title {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.ios-banners__subtitle {
+  font-size: 0.8rem;
+  opacity: 0.92;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.ios-banners__cta {
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-top: 0.25rem;
+}
