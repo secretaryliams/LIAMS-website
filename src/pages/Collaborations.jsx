@@ -1,34 +1,38 @@
 import { Link } from 'react-router-dom';
 import PageHero from '../components/PageHero';
 import Reveal from '../components/motion/Reveal';
-import StaggerGrid from '../components/motion/StaggerGrid';
-import { collaborations } from '../data/siteData';
+import SplitSection from '../components/SplitSection';
+import { collaborationSections } from '../data/siteData';
 
 export default function Collaborations() {
   return (
     <>
       <PageHero
         label="Partnerships"
-        title="Institutional Collaborations & Services"
-        subtitle="MoUs, accreditation support, and collaborative knowledge-sharing initiatives."
+        title="Institutional Collaboration & Services"
+        subtitle="Strategic Partnerships for Institutional Excellence"
       />
 
+      {collaborationSections.map((block, index) => (
+        <SplitSection
+          key={block.id}
+          id={block.id}
+          title={block.title}
+          image={block.image}
+          imageAlt={block.title}
+          reverse={index % 2 === 1}
+          sectionClass={index % 2 === 0 ? '' : 'section--alt'}
+        >
+          <p>{block.text}</p>
+        </SplitSection>
+      ))}
+
       <section className="section">
-        <div className="container">
-          <StaggerGrid className="grid grid--3">
-            {collaborations.map(({ title, description }) => (
-              <article key={title} className="card">
-                <h3>{title}</h3>
-                <p>{description}</p>
-              </article>
-            ))}
-          </StaggerGrid>
-          <Reveal delay={0.1} className="page-cta">
-            <Link to="/contact" className="btn btn--navy">
-              Propose a Collaboration
-            </Link>
-          </Reveal>
-        </div>
+        <Reveal className="container page-cta">
+          <Link to="/contact" className="btn btn--navy">
+            Propose a Collaboration
+          </Link>
+        </Reveal>
       </section>
     </>
   );

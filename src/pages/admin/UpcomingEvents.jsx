@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { formatEventDateLabel } from '../../lib/eventFormat';
 import { DEFAULT_EVENT_VENUE, formatEventVenue } from '../../lib/eventVenue';
+import { uploadEventImage } from '../../lib/storage';
 import { supabase } from '../../lib/supabase';
 import './Admin.css';
 
@@ -10,8 +11,10 @@ export default function UpcomingEvents() {
   const [eventDate, setEventDate] = useState('');
   const [venue, setVenue] = useState('');
   const [formLink, setFormLink] = useState('');
+  const [imageFile, setImageFile] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   const load = useCallback(async () => {
     const { data, error: err } = await supabase
@@ -30,21 +33,34 @@ export default function UpcomingEvents() {
   async function handleAdd(e) {
     e.preventDefault();
     setError('');
-    const { error: err } = await supabase.from('upcoming_events').insert({
-      title: title.trim(),
-      event_date: eventDate || null,
-      venue: venue.trim() || null,
-      form_link: formLink.trim() || null,
-    });
-    if (err) {
-      setError(err.message);
-      return;
+    setSubmitting(true);
+    try {
+      let imageUrl = null;
+      if (imageFile) {
+        imageUrl = await uploadEventImage(imageFile);
+      }
+      const { error: err } = await supabase.from('upcoming_events').insert({
+        title: title.trim(),
+        event_date: eventDate || null,
+        venue: venue.trim() || null,
+        form_link: formLink.trim() || null,
+        image_url: imageUrl,
+      });
+      if (err) {
+        setError(err.message);
+        return;
+      }
+      setTitle('');
+      setEventDate('');
+      setVenue('');
+      setFormLink('');
+      setImageFile(null);
+      load();
+    } catch (err) {
+      setError(err.message || 'Upload failed');
+    } finally {
+      setSubmitting(false);
     }
-    setTitle('');
-    setEventDate('');
-    setVenue('');
-    setFormLink('');
-    load();
   }
 
   async function handleToggle(id, enabled) {
@@ -87,8 +103,16 @@ export default function UpcomingEvents() {
             placeholder="https://..."
           />
         </label>
-        <button type="submit" className="btn btn--primary">
-          Add event
+        <label>
+          Cover image (optional)
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
+          />
+        </label>
+        <button type="submit" className="btn btn--primary" disabled={submitting}>
+          {submitting ? 'Adding…' : 'Add event'}
         </button>
       </form>
       {error && <p className="admin-error">{error}</p>}
@@ -102,6 +126,9 @@ export default function UpcomingEvents() {
               className={`admin-list__item${row.enabled ? '' : ' admin-list__item--disabled'}`}
             >
               <div>
+                {row.image_url && (
+                  <img src={row.image_url} alt="" className="admin-thumb admin-thumb--wide" />
+                )}
                 <div className="admin-list__title-row">
                   <strong>{row.title}</strong>
                   <span

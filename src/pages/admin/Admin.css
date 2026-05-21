@@ -184,6 +184,15 @@
   border-radius: var(--radius-sm);
 }
 
+.admin-thumb--wide {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
 .btn--sm {
   padding: 0.4rem 0.85rem;
   font-size: 0.82rem;

@@ -8,10 +8,10 @@ import './CertificatesFloatingButton.css';
 export default function CertificatesFloatingButton() {
   const { sectionTitle } = useCertificationsSectionTitle();
   const { pathname } = useLocation();
-  const onEvents = pathname === '/events';
+  const onCertsPage = pathname === '/certificates';
 
   function handleClick(e) {
-    if (onEvents) {
+    if (onCertsPage) {
       e.preventDefault();
       scrollToSection(CERTIFICATIONS_SECTION_ID);
     }
@@ -25,7 +25,7 @@ export default function CertificatesFloatingButton() {
       transition={{ duration: 0.45, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
     >
       <Link
-        to={`/events#${CERTIFICATIONS_SECTION_ID}`}
+        to={`/certificates#${CERTIFICATIONS_SECTION_ID}`}
         className="certs-fab__btn"
         aria-label={`View ${sectionTitle}`}
         onClick={handleClick}

@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import EmptyState from '../components/EmptyState';
-import CertificationsStrip from '../components/CertificationsStrip';
 import PageHero from '../components/PageHero';
 import PreviousEventsGallery from '../components/PreviousEventsGallery';
 import Reveal from '../components/motion/Reveal';
 import StaggerGrid from '../components/motion/StaggerGrid';
+import { eventsExpertise, eventsPartnerText } from '../data/siteData';
 import { useUpcomingEvents } from '../hooks/usePublicContent';
 import './Events.css';
 
@@ -16,10 +16,18 @@ export default function Events() {
       <PageHero
         label="Events"
         title="Conferences & Events"
-        subtitle="National and international conferences with peer-reviewed proceedings."
+        subtitle="Global Platforms for Knowledge Sharing and Networking"
       />
 
-      <section className="section">
+      <section id="our-expertise" className="section">
+        <Reveal className="container content-block">
+          <span className="section__label">Our Expertise</span>
+          <h2>Our Expertise</h2>
+          <p>{eventsExpertise}</p>
+        </Reveal>
+      </section>
+
+      <section id="upcoming-events" className="section section--alt">
         <div className="container">
           <Reveal className="section__header">
             <span className="section__label">Upcoming</span>
@@ -33,6 +41,9 @@ export default function Events() {
             <StaggerGrid className="events-list">
               {events.map((event) => (
                 <article key={event.id} className="card event-card">
+                  {event.image_url && (
+                    <img src={event.image_url} alt="" className="event-card__image" />
+                  )}
                   <span className="event-card__status">Upcoming</span>
                   <h3>{event.title}</h3>
                   <p>
@@ -59,42 +70,27 @@ export default function Events() {
         </div>
       </section>
 
-      <section className="section section--alt">
+      <section id="previous-events" className="section">
         <div className="container">
           <Reveal className="section__header">
             <span className="section__label">Gallery</span>
-            <h2>Previous Events</h2>
-            <p>Highlights from conferences, workshops, and programmes hosted by LIAMS.</p>
+            <h2>Gallery & Previous Events</h2>
           </Reveal>
           <PreviousEventsGallery />
         </div>
       </section>
 
-      <section className="section">
+      <section id="partner-events" className="section section--alt">
         <Reveal className="container content-block">
-          <h2>National / International Conferences</h2>
-          <p>
-            LIAMS organizes and co-hosts conferences that bring together researchers, faculty,
-            and industry experts across disciplines. Events follow rigorous academic standards
-            with opportunities for paper presentation and networking.
-          </p>
-
-          <h2>Conference Proceedings</h2>
-          <p>
-            Selected papers from LIAMS conferences are published in peer-reviewed proceedings
-            with ISBN registration and indexing support. Proceedings archives will be listed
-            here as they become available.
-          </p>
-
+          <h2>Partner with us for your next Event</h2>
+          <p>{eventsPartnerText}</p>
           <p className="page-cta">
             <Link to="/contact" className="btn btn--navy">
-              Submit / Register for Events
+              Contact Us
             </Link>
           </p>
         </Reveal>
       </section>
-
-      <CertificationsStrip />
     </>
   );
 }

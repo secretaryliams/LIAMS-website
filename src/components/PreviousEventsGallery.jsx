@@ -1,4 +1,5 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import ImageLightbox from './ImageLightbox';
 import { Autoplay, Navigation, Pagination, A11y } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import EmptyState from './EmptyState';
@@ -37,6 +38,7 @@ export default function PreviousEventsGallery() {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const paginationRef = useRef(null);
+  const [lightbox, setLightbox] = useState(null);
 
   if (loading) {
     return <p className="events-gallery__empty">Loading gallery…</p>;
@@ -124,12 +126,24 @@ export default function PreviousEventsGallery() {
               <figure className="pe-carousel__slide">
                 <div className="pe-carousel__media">
                   {item.image_url ? (
-                    <img
-                      src={item.image_url}
-                      alt={item.caption || item.category || 'Past event'}
-                      loading="lazy"
-                      decoding="async"
-                    />
+                    <button
+                      type="button"
+                      className="pe-carousel__media-btn"
+                      onClick={() =>
+                        setLightbox({
+                          src: item.image_url,
+                          alt: item.caption || item.category || 'Past event',
+                        })
+                      }
+                      aria-label="View full image"
+                    >
+                      <img
+                        src={item.image_url}
+                        alt={item.caption || item.category || 'Past event'}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </button>
                   ) : (
                     <div className="pe-carousel__placeholder" aria-hidden="true" />
                   )}
@@ -158,6 +172,14 @@ export default function PreviousEventsGallery() {
       </div>
 
       <div ref={paginationRef} className="pe-carousel__pagination" />
+
+      {lightbox && (
+        <ImageLightbox
+          src={lightbox.src}
+          alt={lightbox.alt}
+          onClose={() => setLightbox(null)}
+        />
+      )}
     </div>
   );
 }

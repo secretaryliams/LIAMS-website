@@ -110,6 +110,61 @@
   color: var(--gray-600);
 }
 
+.director-message__warm {
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.director-message__sign {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.director-message__photo {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 3px solid var(--gold);
+  box-shadow: var(--shadow);
+}
+
+.director-message__sign div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.objectives-sections {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.objectives-block h3 {
+  color: var(--navy);
+  margin-bottom: 0.85rem;
+  font-family: var(--font-serif);
+}
+
+.objectives-block__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.objectives-block__list li {
+  line-height: 1.6;
+  color: var(--text-body);
+}
+
+.objectives-block__list strong {
+  color: var(--ink);
+}
+
 .board-card__designation {
   font-weight: 600;
   color: var(--blue);

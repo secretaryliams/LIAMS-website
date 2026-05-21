@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import PageHero from '../components/PageHero';
 import Reveal from '../components/motion/Reveal';
-import StaggerGrid from '../components/motion/StaggerGrid';
-import { trainingPrograms } from '../data/siteData';
+import SplitSection from '../components/SplitSection';
+import { trainingIntro, trainingSections } from '../data/siteData';
 
 export default function Training() {
   return (
@@ -10,44 +10,36 @@ export default function Training() {
       <PageHero
         label="Training & Development"
         title="Training & Development"
-        subtitle="Industry-oriented programmes, faculty development, and hands-on workshops."
+        subtitle="Upskilling the Next Generation of Academicians and Professionals"
       />
 
-      <section className="section">
+      <section id="introduction" className="section">
         <Reveal className="container content-block">
           <h2>Introduction</h2>
-          <p>
-            LIAMS Training & Development bridges academic learning and professional practice.
-            Our programmes are designed for students, faculty, and industry partners seeking
-            structured pathways in multidisciplinary skills, research readiness, and innovation.
-          </p>
-          <p>
-            Each offering aligns with our ISO-certified quality management systems, ensuring
-            measurable outcomes and continuous improvement.
-          </p>
+          <p>{trainingIntro}</p>
         </Reveal>
       </section>
 
+      {trainingSections.map((block, index) => (
+        <SplitSection
+          key={block.id}
+          id={block.id}
+          title={block.title}
+          image={block.image}
+          imageAlt={block.title}
+          reverse={index % 2 === 1}
+          sectionClass={index % 2 === 0 ? 'section--alt' : ''}
+        >
+          <p>{block.text}</p>
+        </SplitSection>
+      ))}
+
       <section className="section section--alt">
-        <div className="container">
-          <Reveal className="section__header">
-            <span className="section__label">Programmes</span>
-            <h2>Our Training Offerings</h2>
-          </Reveal>
-          <StaggerGrid className="grid grid--3">
-            {trainingPrograms.map(({ title, description }) => (
-              <article key={title} className="card">
-                <h3>{title}</h3>
-                <p>{description}</p>
-              </article>
-            ))}
-          </StaggerGrid>
-          <Reveal delay={0.1} className="page-cta">
-            <Link to="/contact" className="btn btn--navy">
-              Enquire About Training
-            </Link>
-          </Reveal>
-        </div>
+        <Reveal className="container page-cta">
+          <Link to="/contact" className="btn btn--navy">
+            Enquire About Training
+          </Link>
+        </Reveal>
       </section>
     </>
   );

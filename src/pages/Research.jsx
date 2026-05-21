@@ -1,49 +1,45 @@
 import { Link } from 'react-router-dom';
 import PageHero from '../components/PageHero';
 import Reveal from '../components/motion/Reveal';
-import StaggerGrid from '../components/motion/StaggerGrid';
-import { researchServices } from '../data/siteData';
+import SplitSection from '../components/SplitSection';
+import { researchTagline, researchSections } from '../data/siteData';
 
 export default function Research() {
   return (
     <>
       <PageHero
-        label="Research"
-        title="Research & Innovation"
-        subtitle="Publication support, PhD guidance, innovation lab, and IPR consulting."
+        label="Research & Publications"
+        title="Research & Publications"
+        subtitle={researchTagline}
       />
 
-      <section className="section">
-        <Reveal className="container content-block">
-          <h2>Research & Publication Support</h2>
-          <p>
-            LIAMS provides end-to-end research support for scholars and institutions — from
-            ideation and methodology to publication, indexing, and intellectual property
-            protection. Our innovation lab fosters collaborative, multidisciplinary inquiry.
-          </p>
-        </Reveal>
-      </section>
+      {researchSections.map((block, index) => (
+        <SplitSection
+          key={block.id}
+          id={block.id}
+          title={block.title}
+          image={block.image}
+          imageAlt={block.title}
+          reverse={index % 2 === 1}
+          sectionClass={index % 2 === 0 ? '' : 'section--alt'}
+        >
+          <p>{block.text}</p>
+          {block.bullets && (
+            <ul>
+              {block.bullets.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          )}
+        </SplitSection>
+      ))}
 
       <section className="section section--alt">
-        <div className="container">
-          <Reveal className="section__header">
-            <span className="section__label">Services</span>
-            <h2>Research Services</h2>
-          </Reveal>
-          <StaggerGrid className="grid grid--2 research-services-grid">
-            {researchServices.map(({ title, description }) => (
-              <article key={title} className="card service-detail">
-                <h3>{title}</h3>
-                <p>{description}</p>
-              </article>
-            ))}
-          </StaggerGrid>
-          <Reveal delay={0.1} className="page-cta">
-            <Link to="/contact" className="btn btn--navy">
-              Request Research Support
-            </Link>
-          </Reveal>
-        </div>
+        <Reveal className="container page-cta">
+          <Link to="/contact" className="btn btn--navy">
+            Request Research Support
+          </Link>
+        </Reveal>
       </section>
     </>
   );

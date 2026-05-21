@@ -1,8 +1,15 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { institute, coreServices, vision, mission } from '../data/siteData';
+import {
+  institute,
+  coreServices,
+  vision,
+  missionPoints,
+  homeWelcome,
+  testimonialIntro,
+} from '../data/siteData';
 import AnnouncementStrip from '../components/AnnouncementStrip';
-import CertificatesFloatingButton from '../components/CertificatesFloatingButton';
+import IosBanners from '../components/IosBanners';
 import EventsTicker from '../components/EventsTicker';
 import TestimonialMarquee from '../components/TestimonialMarquee';
 import Reveal from '../components/motion/Reveal';
@@ -13,6 +20,14 @@ export default function Home() {
   return (
     <>
       <section className="hero">
+        {/* Animated background elements */}
+        <div className="hero__background">
+          <div className="hero-shape hero-shape--1"></div>
+          <div className="hero-shape hero-shape--2"></div>
+          <div className="hero-shape hero-shape--3"></div>
+          <div className="hero-glow hero-glow--1"></div>
+          <div className="hero-glow hero-glow--2"></div>
+        </div>
         <div className="container hero__grid">
           <motion.div
             className="hero__content"
@@ -23,12 +38,7 @@ export default function Home() {
             <span className="hero__badge">Welcome to {institute.shortName}</span>
             <h1>{institute.name}</h1>
             <p className="hero__tagline">{institute.tagline}</p>
-            <p className="hero__intro">
-              Welcome to the Loyola Institute of Advanced Multidisciplinary Studies. We are a dynamic
-              academic and research ecosystem designed to bridge the gap between academia and industry.
-              By integrating modern technological trends with rigorous academic frameworks, we provide
-              comprehensive support for students, scholars, and academicians globally.
-            </p>
+            <p className="hero__intro">{homeWelcome}</p>
             <div className="hero__actions">
               <Link to="/about" className="btn btn--primary">
                 Discover LIAMS
@@ -54,8 +64,9 @@ export default function Home() {
       </section>
 
       <AnnouncementStrip />
+      <IosBanners />
 
-      <section className="section">
+      <section id="vision-mission" className="section">
         <div className="container">
           <Reveal className="section__header">
             <span className="section__label">Purpose</span>
@@ -63,26 +74,26 @@ export default function Home() {
           </Reveal>
           <StaggerGrid className="vision-mission grid grid--2">
             <article className="intro-card">
-              <h3>Our Vision</h3>
+              <h3>Vision</h3>
               <p>{vision}</p>
             </article>
             <article className="intro-card intro-card--gold">
-              <h3>Our Mission</h3>
-              <p>{mission}</p>
+              <h3>Mission</h3>
+              <ul className="mission-list">
+                {missionPoints.map((point) => (
+                  <li key={point}>{point}</li>
+                ))}
+              </ul>
             </article>
           </StaggerGrid>
         </div>
       </section>
 
-      <section className="section section--alt">
+      <section id="what-we-offer" className="section section--alt">
         <div className="container">
           <Reveal className="section__header">
             <span className="section__label">Core Services</span>
-            <h2>What We Offer</h2>
-            <p>
-              Comprehensive academic and institutional services across training, research,
-              events, and collaborations.
-            </p>
+            <h2>What do we offer?</h2>
           </Reveal>
           <StaggerGrid className="grid grid--3 home-article-grid">
             {coreServices.map(({ title, description, path, icon }) => (
@@ -101,24 +112,48 @@ export default function Home() {
         </div>
       </section>
 
-      <EventsTicker />
+      <div id="upcoming-events">
+        <EventsTicker />
+      </div>
 
-      <TestimonialMarquee />
+      <div id="testimonials">
+        <TestimonialMarquee subtitle={testimonialIntro} />
+      </div>
+
+      <section className="credentials-section">
+        <div className="container">
+          <Reveal className="credentials-header">
+            <h2>Certified & Recognized</h2>
+          </Reveal>
+          <div className="credentials-grid">
+            <div className="credential-badge">
+              <div className="credential-badge__icon">✓</div>
+              <p className="credential-badge__text">ISO 9001:2015</p>
+            </div>
+            <div className="credential-badge">
+              <div className="credential-badge__icon">✓</div>
+              <p className="credential-badge__text">ISO 21001:2018</p>
+            </div>
+            <div className="credential-badge">
+              <div className="credential-badge__icon">✓</div>
+              <p className="credential-badge__text">Registered under MSME, Government of India</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section className="cta-banner">
         <Reveal className="container cta-banner__inner">
-          <h2>Partner With LIAMS</h2>
+          <h2>You can reach us through...</h2>
           <p>
-            Explore collaborations, training programmes, and research support tailored to your
-            institution.
+            Partnerships, training, research support, publications, events, and general enquiries —
+            our team is ready to assist you.
           </p>
           <Link to="/contact" className="btn btn--primary">
-            Start a Conversation
+            Contact Us
           </Link>
         </Reveal>
       </section>
-
-      <CertificatesFloatingButton />
     </>
   );
 }

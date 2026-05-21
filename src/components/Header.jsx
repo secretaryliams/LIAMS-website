@@ -1,7 +1,52 @@
 import { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { navLinks } from '../data/siteData';
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import { navLinks, pageNavSections } from '../data/siteData';
 import './Header.css';
+
+function NavItem({ path, label, closeMenu }) {
+  const sections = pageNavSections[path] ?? [];
+  const location = useLocation();
+  const isOnPage = location.pathname === path;
+
+  if (!sections.length) {
+    return (
+      <li>
+        <NavLink to={path} end={path === '/'} className={({ isActive }) => (isActive ? 'active' : undefined)} onClick={closeMenu}>
+          {label}
+        </NavLink>
+      </li>
+    );
+  }
+
+  return (
+    <li className="header__nav-item header__nav-item--has-menu">
+      <NavLink
+        to={path}
+        end={path === '/'}
+        className={({ isActive }) => (isActive ? 'active' : undefined)}
+        onClick={closeMenu}
+      >
+        {label}
+      </NavLink>
+      <div className="header__submenu" role="menu">
+        {sections.map(({ id, label: sectionLabel }) => (
+          <Link
+            key={id}
+            to={`${path}#${id}`}
+            role="menuitem"
+            className="header__submenu-link"
+            onClick={closeMenu}
+          >
+            {sectionLabel}
+          </Link>
+        ))}
+        {isOnPage && (
+          <span className="header__submenu-hint">Jump to section on this page</span>
+        )}
+      </div>
+    </li>
+  );
+}
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -11,11 +56,7 @@ export default function Header() {
     <header className="header">
       <div className="container header__inner">
         <Link to="/" className="header__brand" onClick={closeMenu}>
-          <img
-            src="/logos/liams-logo-symbol.png"
-            alt="LIAMS crest"
-            className="header__logo"
-          />
+          <img src="/logos/liams-logo-symbol.png" alt="LIAMS crest" className="header__logo" />
           <span className="header__brand-text">
             <strong>LIAMS</strong>
             <small>Loyola Institute of Advanced Multidisciplinary Studies</small>
@@ -36,23 +77,12 @@ export default function Header() {
 
         <nav className={`header__nav ${menuOpen ? 'is-open' : ''}`} aria-label="Main">
           <ul>
-            {navLinks
-              .filter((link) => link.path !== '/contact')
-              .map(({ path, label }) => (
-              <li key={path}>
-                <NavLink
-                  to={path}
-                  end={path === '/'}
-                  className={({ isActive }) => (isActive ? 'active' : undefined)}
-                  onClick={closeMenu}
-                >
-                  {label}
-                </NavLink>
-              </li>
+            {navLinks.map(({ path, label }) => (
+              <NavItem key={path} path={path} label={label} closeMenu={closeMenu} />
             ))}
           </ul>
           <Link to="/contact" className="btn btn--primary header__cta" onClick={closeMenu}>
-            Contact
+            Contact Us
           </Link>
         </nav>
       </div>

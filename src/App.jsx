@@ -6,6 +6,7 @@ import Training from './pages/Training';
 import Research from './pages/Research';
 import Events from './pages/Events';
 import Collaborations from './pages/Collaborations';
+import Certificates from './pages/Certificates';
 import Contact from './pages/Contact';
 import ProtectedRoute from './routes/ProtectedRoute';
 import Login from './pages/admin/Login';
@@ -28,6 +29,7 @@ export default function App() {
           <Route path="training" element={<Training />} />
           <Route path="research" element={<Research />} />
           <Route path="events" element={<Events />} />
+          <Route path="certificates" element={<Certificates />} />
           <Route path="collaborations" element={<Collaborations />} />
           <Route path="contact" element={<Contact />} />
         </Route>

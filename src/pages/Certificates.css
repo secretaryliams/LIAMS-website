@@ -1,0 +1,29 @@
+.certificates-page__grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+  padding: 0;
+}
+
+.certificates-page__card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.certificates-page__icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.certificates-page__muted {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.certificates-page__status {
+  text-align: center;
+  color: var(--text-muted);
+}
