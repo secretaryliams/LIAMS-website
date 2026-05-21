@@ -1,4 +1,4 @@
-export const RESET_PASSWORD_REDIRECT = 'http://localhost:5173/reset-password/reset-password';
+export const RESET_PASSWORD_REDIRECT = 'https://liams.in/reset-password';
 export const ADMIN_LOGIN_PATH = '/admin/login';
 
 /** Basic email format check (abc@gmail.com) */
