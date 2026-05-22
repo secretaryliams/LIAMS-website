@@ -8,8 +8,10 @@ import Events from './pages/Events';
 import Collaborations from './pages/Collaborations';
 import Certificates from './pages/Certificates';
 import Contact from './pages/Contact';
-import ProtectedRoute from './routes/ProtectedRoute';
+import ProtectedAdminRoute from './routes/ProtectedAdminRoute';
 import Login from './pages/admin/Login';
+import ForgotPassword from './pages/admin/ForgotPassword';
+import ResetPassword from './pages/admin/ResetPassword';
 import AdminLayout from './pages/admin/AdminLayout';
 import Dashboard from './pages/admin/Dashboard';
 import Announcements from './pages/admin/Announcements';
@@ -35,7 +37,9 @@ export default function App() {
         </Route>
 
         <Route path="/admin/login" element={<Login />} />
-        <Route path="/admin" element={<ProtectedRoute />}>
+        <Route path="/admin/forgot-password" element={<ForgotPassword />} />
+        <Route path="/admin/reset-password" element={<ResetPassword />} />
+        <Route path="/admin" element={<ProtectedAdminRoute />}>
           <Route element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="announcements" element={<Announcements />} />
