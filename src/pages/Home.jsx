@@ -9,7 +9,6 @@ import {
   testimonialIntro,
 } from '../data/siteData';
 import AnnouncementStrip from '../components/AnnouncementStrip';
-import IosBanners from '../components/IosBanners';
 import EventsTicker from '../components/EventsTicker';
 import TestimonialMarquee from '../components/TestimonialMarquee';
 import Reveal from '../components/motion/Reveal';
@@ -38,7 +37,10 @@ export default function Home() {
             <span className="hero__badge">Welcome to {institute.shortName}</span>
             <h1>{institute.name}</h1>
             <p className="hero__tagline">{institute.tagline}</p>
-            <p className="hero__intro">{homeWelcome}</p>
+            <p className="hero__intro">
+              Empowering students, researchers, and institutions with multidisciplinary
+              research, training, and accreditation support.
+            </p>
             <div className="hero__actions">
               <Link to="/about" className="btn btn--primary">
                 Discover LIAMS
@@ -64,7 +66,49 @@ export default function Home() {
       </section>
 
       <AnnouncementStrip />
-      <IosBanners />
+
+      <section className="credentials-section">
+        <div className="container">
+          <Reveal className="credentials-header">
+            <h2>Certified & Recognized</h2>
+          </Reveal>
+          <div className="credentials-grid">
+            <div className="credential-badge">
+              <div className="credential-badge__icon">✓</div>
+              <p className="credential-badge__text">ISO 9001:2015</p>
+            </div>
+            <div className="credential-badge">
+              <div className="credential-badge__icon">✓</div>
+              <p className="credential-badge__text">ISO 21001:2018</p>
+            </div>
+            <div className="credential-badge">
+              <div className="credential-badge__icon">✓</div>
+              <p className="credential-badge__text">Registered under MSME, Government of India</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="introduction" className="section section--alt">
+        <div className="container">
+          <Reveal className="section__header">
+            <span className="section__label">Introduction</span>
+            <h2>Who We Are</h2>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <div className="introduction-grid">
+              <div className="introduction-copy">
+                <p>{homeWelcome}</p>
+              </div>
+              <div className="introduction-media">
+                <div className="introduction-media__placeholder">
+                  Introduction image
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
       <section id="vision-mission" className="section">
         <div className="container">
@@ -72,20 +116,30 @@ export default function Home() {
             <span className="section__label">Purpose</span>
             <h2>Vision & Mission</h2>
           </Reveal>
-          <StaggerGrid className="vision-mission grid grid--2">
-            <article className="intro-card">
-              <h3>Vision</h3>
-              <p>{vision}</p>
+          <div className="vision-mission-grid">
+            <article className="intro-card intro-card--with-media intro-card--vision">
+              <div className="intro-card__content">
+                <h3>Vision</h3>
+                <p>{vision}</p>
+              </div>
+              <div className="intro-card__media">
+                <div className="intro-card__placeholder">Vision image</div>
+              </div>
             </article>
-            <article className="intro-card intro-card--gold">
-              <h3>Mission</h3>
-              <ul className="mission-list">
-                {missionPoints.map((point) => (
-                  <li key={point}>{point}</li>
-                ))}
-              </ul>
+            <article className="intro-card intro-card--gold intro-card--with-media intro-card--mission">
+              <div className="intro-card__media">
+                <div className="intro-card__placeholder">Mission image</div>
+              </div>
+              <div className="intro-card__content">
+                <h3>Mission</h3>
+                <ul className="mission-list">
+                  {missionPoints.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
+              </div>
             </article>
-          </StaggerGrid>
+          </div>
         </div>
       </section>
 
@@ -119,28 +173,6 @@ export default function Home() {
       <div id="testimonials">
         <TestimonialMarquee subtitle={testimonialIntro} />
       </div>
-
-      <section className="credentials-section">
-        <div className="container">
-          <Reveal className="credentials-header">
-            <h2>Certified & Recognized</h2>
-          </Reveal>
-          <div className="credentials-grid">
-            <div className="credential-badge">
-              <div className="credential-badge__icon">✓</div>
-              <p className="credential-badge__text">ISO 9001:2015</p>
-            </div>
-            <div className="credential-badge">
-              <div className="credential-badge__icon">✓</div>
-              <p className="credential-badge__text">ISO 21001:2018</p>
-            </div>
-            <div className="credential-badge">
-              <div className="credential-badge__icon">✓</div>
-              <p className="credential-badge__text">Registered under MSME, Government of India</p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <section className="cta-banner">
         <Reveal className="container cta-banner__inner">

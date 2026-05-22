@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import PageHero from '../components/PageHero';
 import Reveal from '../components/motion/Reveal';
 import StaggerGrid from '../components/motion/StaggerGrid';
+import SplitSection from '../components/SplitSection';
 import {
   objectivesIntro,
   objectivesSections,
@@ -12,6 +14,16 @@ import {
 import './About.css';
 
 export default function About() {
+  const [directorImageError, setDirectorImageError] = useState(false);
+
+  const getInitials = (name) =>
+    name
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0].toUpperCase())
+      .join('');
+
   return (
     <>
       <PageHero
@@ -35,30 +47,6 @@ export default function About() {
           <Reveal delay={0.1} className="about-symbol">
             <img src="/logos/liams-logo-symbol.png" alt="" aria-hidden="true" />
           </Reveal>
-        </div>
-      </section>
-
-      <section id="core-objectives" className="section section--alt">
-        <div className="container">
-          <Reveal className="section__header">
-            <span className="section__label">Objectives</span>
-            <h2>Core Objectives</h2>
-            <p>{objectivesIntro}</p>
-          </Reveal>
-          <div className="objectives-sections">
-            {objectivesSections.map((section) => (
-              <Reveal key={section.title} className="objectives-block card">
-                <h3>{section.title}</h3>
-                <ul className="objectives-block__list">
-                  {section.items.map(({ label, text }) => (
-                    <li key={label}>
-                      <strong>{label}:</strong> {text}
-                    </li>
-                  ))}
-                </ul>
-              </Reveal>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -86,6 +74,7 @@ export default function About() {
           </Reveal>
           <Reveal delay={0.08}>
             <article className="director-message card">
+              
               <p>Welcome to the Loyola Institute of Advanced Multidisciplinary Studies.</p>
               <p>
                 In today&apos;s rapidly evolving global landscape, the most profound breakthroughs
@@ -127,20 +116,29 @@ export default function About() {
               </p>
               <p className="director-message__warm">Warm regards,</p>
               <footer className="director-message__sign">
-                <img
-                  src={directorPhoto}
-                  alt="Dr. T. Lurthu Pushparaj"
-                  className="director-message__photo"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
-                <div>
-                  <strong>Dr. T. Lurthu Pushparaj, B.Sc., M.Sc., Ph.D.</strong>
-                  <span>Director</span>
-                  <span>Loyola Institute of Advanced Multidisciplinary Studies</span>
-                </div>
-              </footer>
+
+  <div className="director-message__portrait">
+    {!directorImageError ? (
+      <img
+        src={directorPhoto}
+        alt="Dr. T. Lurthu Pushparaj"
+        className="director-message__photo"
+        onError={() => setDirectorImageError(true)}
+      />
+    ) : (
+      <div className="director-message__photo director-message__photo--placeholder">
+        DP
+      </div>
+    )}
+  </div>
+
+  <div className="director-message__details">
+    <strong>Dr. T. Lurthu Pushparaj, B.Sc., M.Sc., Ph.D.</strong>
+    <span>Director</span>
+    <span>Loyola Institute of Advanced Multidisciplinary Studies</span>
+  </div>
+
+</footer>
             </article>
           </Reveal>
         </div>
@@ -154,12 +152,19 @@ export default function About() {
           </Reveal>
           <StaggerGrid className="grid grid--2 board-cards-grid">
             {advisoryBoard.map(({ name, designation, field, photo }) => (
-              <article key={name} className="card board-card board-card--with-photo">
-                {photo && (
-                  <div className="board-card__photo">
+              <article
+                key={name}
+                className={`card board-card ${photo ? 'board-card--with-photo' : 'board-card--placeholder'}`}
+              >
+                <div className="board-card__photo">
+                  {photo ? (
                     <img src={photo} alt={name} loading="lazy" />
-                  </div>
-                )}
+                  ) : (
+                    <div className="board-card__photo-placeholder">
+                      {getInitials(name)}
+                    </div>
+                  )}
+                </div>
                 <div className="board-card__body">
                   <h3>{name}</h3>
                   <p className="board-card__designation">{designation}</p>
@@ -170,6 +175,36 @@ export default function About() {
           </StaggerGrid>
         </div>
       </section>
+
+      <section id="core-objectives" className="section section--alt">
+        <div className="container">
+          <Reveal className="section__header">
+            <span className="section__label">Objectives</span>
+            <h2>Core Objectives</h2>
+            <p>{objectivesIntro}</p>
+          </Reveal>
+        </div>
+      </section>
+
+      {objectivesSections.map((section, index) => (
+        <SplitSection
+          key={section.title}
+          id={`core-objective-${index + 1}`}
+          title={section.title}
+          image={section.image}
+          imageAlt={section.title}
+          reverse={index % 2 === 1}
+          sectionClass={index % 2 === 0 ? 'section--alt' : ''}
+        >
+          <ul>
+            {section.items.map(({ label, text }) => (
+              <li key={label}>
+                <strong>{label}:</strong> {text}
+              </li>
+            ))}
+          </ul>
+        </SplitSection>
+      ))}
     </>
   );
 }

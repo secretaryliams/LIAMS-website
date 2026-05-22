@@ -8,8 +8,7 @@ export default function Collaborations() {
   return (
     <>
       <PageHero
-        label="Partnerships"
-        title="Institutional Collaboration & Services"
+        label="Institutional Collaboration & Services"
         subtitle="Strategic Partnerships for Institutional Excellence"
       />
 
