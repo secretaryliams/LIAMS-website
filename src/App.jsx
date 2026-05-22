@@ -11,7 +11,11 @@ import Contact from './pages/Contact';
 import ProtectedAdminRoute from './routes/ProtectedAdminRoute';
 import Login from './pages/admin/Login';
 import ForgotPassword from './pages/admin/ForgotPassword';
+<<<<<<< HEAD
 import ResetPassword from './pages/admin/ResetPassword';
+=======
+import UpdatePassword from './pages/admin/UpdatePassword';
+>>>>>>> e0321e0dab8bad0ccfa8b89c5af7b4681dc5a1ec
 import AdminLayout from './pages/admin/AdminLayout';
 import Dashboard from './pages/admin/Dashboard';
 import Announcements from './pages/admin/Announcements';
@@ -38,8 +42,13 @@ export default function App() {
 
         <Route path="/admin/login" element={<Login />} />
         <Route path="/admin/forgot-password" element={<ForgotPassword />} />
+<<<<<<< HEAD
         <Route path="/admin/reset-password" element={<ResetPassword />} />
         <Route path="/admin" element={<ProtectedAdminRoute />}>
+=======
+        <Route path="/admin/update-password" element={<UpdatePassword />} />
+        <Route path="/admin" element={<ProtectedRoute />}>
+>>>>>>> e0321e0dab8bad0ccfa8b89c5af7b4681dc5a1ec
           <Route element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="announcements" element={<Announcements />} />

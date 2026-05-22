@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
-import { formatEventDateLabel } from '../../lib/eventFormat';
-import { formatEventVenue } from '../../lib/eventVenue';
-import { useCertificationsSectionTitle } from '../../hooks/useSiteSettings';
-import { supabase } from '../../lib/supabase';
+import { formatEventDateLabel } from "../../lib/eventFormat";
+import { formatEventVenue } from "../../lib/eventVenue";
+import { useCertificationsSectionTitle } from "../../hooks/useSiteSettings";
+import { supabase } from "../../lib/supabase";
 
-import './Admin.css';
+import "./Admin.css";
 
 function DashboardPanel({
   title,
@@ -31,8 +31,9 @@ function DashboardPanel({
       <header className="admin-panel__header">
         <div>
           <h3>{title}</h3>
+
           <span className="admin-panel__count">
-            {count} item{count === 1 ? '' : 's'}
+            {count} item{count === 1 ? "" : "s"}
           </span>
         </div>
 
@@ -81,74 +82,88 @@ export default function Dashboard() {
     certifications: [],
   });
 
+  const [announcements, setAnnouncements] = useState([]);
+  const [upcoming, setUpcoming] = useState([]);
+  const [previous, setPrevious] = useState([]);
+  const [certifications, setCertifications] = useState([]);
+
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const load = useCallback(async () => {
     try {
       setLoading(true);
-      setError('');
+      setError("");
 
-      const [
-        announcementsRes,
-        upcomingRes,
-        previousRes,
-        certificationsRes,
-      ] = await Promise.all([
-        supabase
-          .from('announcements')
-          .select('*')
-          .order('created_at', { ascending: false }),
+      const [a, u, p, c] = await Promise.all([
+        supabase.from("announcements").select("*").order("created_at", {
+          ascending: false,
+        }),
 
-        supabase
-          .from('upcoming_events')
-          .select('*')
-          .order('event_date', {
-            ascending: true,
-            nullsFirst: false,
-          }),
+        supabase.from("upcoming_events").select("*").order("event_date", {
+          ascending: true,
+          nullsFirst: false,
+        }),
 
-        supabase
-          .from('previous_events')
-          .select('*')
-          .order('created_at', { ascending: false }),
+        supabase.from("previous_events").select("*").order("created_at", {
+          ascending: false,
+        }),
 
-        supabase
-          .from('certifications')
-          .select('*')
-          .order('created_at', { ascending: false }),
+        supabase.from("certifications").select("*").order("created_at", {
+          ascending: false,
+        }),
       ]);
 
-      const errors = [
-        announcementsRes.error,
-        upcomingRes.error,
-        previousRes.error,
-        certificationsRes.error,
-      ].filter(Boolean);
+      if (a.error || u.error || p.error || c.error) {
+        setError(
+          a.error?.message ||
+            u.error?.message ||
+            p.error?.message ||
+            c.error?.message ||
+            "Failed to load dashboard",
+        );
 
-      if (errors.length > 0) {
-        throw new Error(errors[0].message);
+        return;
       }
 
-      setData({
-        announcements: announcementsRes.data ?? [],
-        upcoming: upcomingRes.data ?? [],
-        previous: previousRes.data ?? [],
-        certifications: certificationsRes.data ?? [],
-      });
+      setAnnouncements(a.data ?? []);
+      setUpcoming(u.data ?? []);
+      setPrevious(p.data ?? []);
+      setCertifications(c.data ?? []);
     } catch (err) {
-      setError(err.message || 'Something went wrong.');
+      setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-  let mounted = true;
-
-  async function init() {
-    if (mounted) {
+    const fetchData = async () => {
       await load();
+    };
+
+    fetchData();
+  }, []);
+
+  async function remove(table, id) {
+    try {
+      if (
+        typeof window !== "undefined" &&
+        !window.confirm("Delete this item permanently?")
+      ) {
+        return;
+      }
+
+      const { error } = await supabase.from(table).delete().eq("id", id);
+
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      load();
+    } catch (err) {
+      setError(err.message || "Failed to delete item");
     }
   }
 
@@ -198,9 +213,8 @@ export default function Dashboard() {
         <h2>Content overview</h2>
 
         <p>
-          Manage dynamic content shown on the public LIAMS website.
-          Use quick actions below or open a section to add and edit
-          entries.
+          Manage dynamic content shown on the public LIAMS website. Use quick
+          actions below or open a section to add and edit entries.
         </p>
       </header>
 
@@ -228,14 +242,22 @@ export default function Dashboard() {
                   <div className="admin-panel__body">
                     <p>{row.text}</p>
 
-                    <StatusBadge enabled={row.enabled} />
+                    <span
+                      className={`admin-badge${
+                        row.enabled ? "" : " admin-badge--off"
+                      }`}
+                    >
+                      {row.enabled ? "Live" : "Hidden"}
+                    </span>
                   </div>
 
-                  <DeleteButton
-                    onDelete={() =>
-                      remove('announcements', row.id)
-                    }
-                  />
+                  <button
+                    type="button"
+                    className="btn btn--danger btn--sm"
+                    onClick={() => remove("announcements", row.id)}
+                  >
+                    Delete
+                  </button>
                 </li>
               ))}
             </ul>
@@ -256,18 +278,26 @@ export default function Dashboard() {
                     <strong>{row.title}</strong>
 
                     <p className="admin-muted">
-                      {formatEventDateLabel(row.event_date)} ·{' '}
+                      {formatEventDateLabel(row.event_date)} ·{" "}
                       {formatEventVenue(row.venue)}
                     </p>
 
-                    <StatusBadge enabled={row.enabled} />
+                    <span
+                      className={`admin-badge${
+                        row.enabled ? "" : " admin-badge--off"
+                      }`}
+                    >
+                      {row.enabled ? "Live" : "Hidden"}
+                    </span>
                   </div>
 
-                  <DeleteButton
-                    onDelete={() =>
-                      remove('upcoming_events', row.id)
-                    }
-                  />
+                  <button
+                    type="button"
+                    className="btn btn--danger btn--sm"
+                    onClick={() => remove("upcoming_events", row.id)}
+                  >
+                    Delete
+                  </button>
                 </li>
               ))}
             </ul>
@@ -290,29 +320,26 @@ export default function Dashboard() {
                   {row.image_url && (
                     <img
                       src={row.image_url}
-                      alt={row.caption || 'Event preview'}
+                      alt=""
                       className="admin-panel__preview"
-                      loading="lazy"
                     />
                   )}
 
                   <div className="admin-panel__body">
-                    <strong>
-                      {row.category || 'Gallery item'}
-                    </strong>
+                    <strong>{row.category || "Gallery item"}</strong>
 
                     {row.caption && (
-                      <p className="admin-muted">
-                        {row.caption}
-                      </p>
+                      <p className="admin-muted">{row.caption}</p>
                     )}
                   </div>
 
-                  <DeleteButton
-                    onDelete={() =>
-                      remove('previous_events', row.id)
-                    }
-                  />
+                  <button
+                    type="button"
+                    className="btn btn--danger btn--sm"
+                    onClick={() => remove("previous_events", row.id)}
+                  >
+                    Delete
+                  </button>
                 </li>
               ))}
             </ul>
@@ -345,11 +372,13 @@ export default function Dashboard() {
                     )}
                   </div>
 
-                  <DeleteButton
-                    onDelete={() =>
-                      remove('certifications', row.id)
-                    }
-                  />
+                  <button
+                    type="button"
+                    className="btn btn--danger btn--sm"
+                    onClick={() => remove("certifications", row.id)}
+                  >
+                    Delete
+                  </button>
                 </li>
               ))}
             </ul>
