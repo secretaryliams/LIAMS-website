@@ -3,7 +3,13 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import { navLinks, pageNavSections } from '../data/siteData';
 import './Header.css';
 
-function NavItem({ path, label, closeMenu }) {
+function NavItem({
+  path,
+  label,
+  closeMenu,
+  activeMenu,
+  setActiveMenu
+}) {
   const sections = pageNavSections[path] ?? [];
   const location = useLocation();
   const isOnPage = location.pathname === path;
@@ -19,7 +25,11 @@ function NavItem({ path, label, closeMenu }) {
   }
 
   return (
-    <li className="header__nav-item header__nav-item--has-menu">
+    <li
+      className="header__nav-item header__nav-item--has-menu"
+      onMouseEnter={() => setActiveMenu(label)}
+      onMouseLeave={() => setActiveMenu(null)}
+    >
       <NavLink
         to={path}
         end={path === '/'}
@@ -28,28 +38,33 @@ function NavItem({ path, label, closeMenu }) {
       >
         {label}
       </NavLink>
-      <div className="header__submenu" role="menu">
-        {sections.map(({ id, label: sectionLabel }) => (
-          <Link
-            key={id}
-            to={`${path}#${id}`}
-            role="menuitem"
-            className="header__submenu-link"
-            onClick={closeMenu}
-          >
-            {sectionLabel}
-          </Link>
-        ))}
-        {isOnPage && (
-          <span className="header__submenu-hint">Jump to section on this page</span>
-        )}
-      </div>
+      {activeMenu === label && (
+        <div className="header__submenu" role="menu">
+          {sections.map(({ id, label: sectionLabel }) => (
+            <Link
+              key={id}
+              to={`${path}#${id}`}
+              role="menuitem"
+              className="header__submenu-link"
+              onClick={closeMenu}
+            >
+              {sectionLabel}
+            </Link>
+          ))}
+          {isOnPage && (
+            <span className="header__submenu-hint">Jump to section on this page</span>
+          )}
+        </div>
+      )}
     </li>
   );
 }
 
+
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeMenu, setActiveMenu] = useState(null);
+
   const closeMenu = () => setMenuOpen(false);
 
   return (
@@ -78,7 +93,14 @@ export default function Header() {
         <nav className={`header__nav ${menuOpen ? 'is-open' : ''}`} aria-label="Main">
           <ul>
             {navLinks.map(({ path, label }) => (
-              <NavItem key={path} path={path} label={label} closeMenu={closeMenu} />
+              <NavItem
+                key={path}
+                path={path}
+                label={label}
+                closeMenu={closeMenu}
+                activeMenu={activeMenu}
+                setActiveMenu={setActiveMenu}
+              />
             ))}
           </ul>
           <Link to="/contact" className="btn btn--primary header__cta" onClick={closeMenu}>
