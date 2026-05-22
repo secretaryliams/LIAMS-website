@@ -63,6 +63,9 @@ export default function Login() {
             <button type="submit" className="btn btn--primary" disabled={submitting}>
               {submitting ? 'Signing in…' : 'Sign in'}
             </button>
+            <p className="admin-muted" style={{ marginTop: '1rem', textAlign: 'center' }}>
+              <Link to="/admin/forgot-password">Forgot password?</Link>
+            </p>
           </form>
         )}
         <p className="admin-muted" style={{ marginTop: '1rem' }}>

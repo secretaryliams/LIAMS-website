@@ -39,6 +39,18 @@ export function AuthProvider({ children }) {
         if (!supabase) return;
         await supabase.auth.signOut();
       },
+      resetPassword: async (email) => {
+        if (!supabase) throw new Error('Supabase is not configured');
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/admin/update-password`,
+        });
+        if (error) throw error;
+      },
+      updatePassword: async (newPassword) => {
+        if (!supabase) throw new Error('Supabase is not configured');
+        const { error } = await supabase.auth.updateUser({ password: newPassword });
+        if (error) throw error;
+      },
     }),
     [session, loading],
   );
