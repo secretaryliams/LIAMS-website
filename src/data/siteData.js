@@ -27,7 +27,6 @@ export const navLinks = [
   { path: '/events', label: 'Events' },
   { path: '/certificates', label: 'Certificates' },
   { path: '/collaborations', label: 'Collaborations' },
-  { path: '/contact', label: 'Contact Us' },
 ];
 
 export const pageNavSections = {

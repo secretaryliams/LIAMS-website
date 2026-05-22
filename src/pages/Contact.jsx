@@ -121,6 +121,21 @@ export default function Contact() {
           </Reveal>
         </div>
       </section>
+
+      <section className="section section--alt contact-social-section">
+        <div className="container contact-social-section__inner">
+          <Reveal>
+            <div className="contact-social-section__card card">
+              <div className="contact-social-section__hero">
+                <span className="contact-social-section__eyebrow">Follow Us</span>
+                <h2>Stay connected with LIAMS</h2>
+                <p>Join our community on social media for training updates, event news, and expert insights.</p>
+              </div>
+              <SocialIcons className="contact-social-section__icons" />
+            </div>
+          </Reveal>
+        </div>
+      </section>
     </>
   );
 }
