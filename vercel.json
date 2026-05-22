@@ -1,34 +1,20 @@
 {
-    "rewrites": [
-      {
-        "source": "/auth/callback",
-        "destination": "/index.html"
-      },
-      {
-        "source": "/auth/v1/callback",
-        "destination": "/index.html"
-      },
-      {
-        "source": "/auth/v1/verify",
-        "destination": "/index.html"
-      },
-      {
-        "source": "/(.*)",
-        "destination": "/index.html"
-      }
-    ]
-  },
-  "routes": [
+  "rewrites": [
     {
-      "src": "/auth/callback",
-      "dest": "/index.html"
+      "source": "/auth/callback",
+      "destination": "/index.html"
     },
     {
-      "src": "/auth/v1/callback",
-      "dest": "/index.html"
+      "source": "/auth/v1/callback",
+      "destination": "/index.html"
     },
     {
-      "src": "/auth/v1/verify",
-      "dest": "/index.html"
+      "source": "/auth/v1/verify",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
+}
