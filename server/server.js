@@ -205,12 +205,12 @@ app.post('/api/auth/forgot-password', forgotPasswordLimiter, async (req, res) =>
     // 1. Query public.admin_users to check admin existence and role
     const { data: admin, error: dbError } = await supabase
       .from('admin_users')
-      .select('id, role, is_active')
+      .select('auth_user_id, role, is_active')
       .eq('email', email)
       .maybeSingle();
 
     if (dbError) {
-      console.error('Database query failed for forgot-password check:', dbError);
+      console.error('Database query failed for forgot-password check:', dbError.message);
       return res.status(200).json(genericResponse); // Safe fallback
     }
 
@@ -224,12 +224,12 @@ app.post('/api/auth/forgot-password', forgotPasswordLimiter, async (req, res) =>
       });
 
       if (resetError) {
-        console.error('Supabase reset password request failed:', resetError);
+        console.error('Supabase reset password request failed:', resetError.message);
         return res.status(200).json(genericResponse);
       }
 
       // Write to audit log
-      await logAuditEvent(admin.id, `password_reset_requested_email: ${email}`, req);
+      await logAuditEvent(admin.auth_user_id, `password_reset_requested_email: ${email}`, req);
       console.log(`Success: Forgot Password email triggered for active admin: ${email}`);
     } else {
       // Prevent user enumeration: log skipped email

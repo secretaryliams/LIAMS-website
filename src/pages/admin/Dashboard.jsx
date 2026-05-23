@@ -51,26 +51,6 @@ function DashboardPanel({
   );
 }
 
-function StatusBadge({ enabled }) {
-  return (
-    <span className={`admin-badge${enabled ? '' : ' admin-badge--off'}`}>
-      {enabled ? 'Live' : 'Hidden'}
-    </span>
-  );
-}
-
-function DeleteButton({ onDelete }) {
-  return (
-    <button
-      type="button"
-      className="btn btn--danger btn--sm"
-      onClick={onDelete}
-    >
-      Delete
-    </button>
-  );
-}
-
 export default function Dashboard() {
   const { sectionTitle: certsSectionTitle } =
     useCertificationsSectionTitle();

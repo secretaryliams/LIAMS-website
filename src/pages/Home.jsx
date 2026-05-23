@@ -85,6 +85,14 @@ export default function Home() {
               <div className="credential-badge__icon">✓</div>
               <p className="credential-badge__text">Registered under MSME, Government of India</p>
             </div>
+            <div className="credential-badge">
+              <div className="credential-badge__icon">✓</div>
+              <p className="credential-badge__text">Recognized under StartupTN</p>
+            </div>
+            <div className="credential-badge">
+              <div className="credential-badge__icon">✓</div>
+              <p className="credential-badge__text">Certified MSME Zed</p>
+            </div>
           </div>
         </div>
       </section>

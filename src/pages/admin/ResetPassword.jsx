@@ -79,9 +79,11 @@ export default function ResetPassword() {
     if (!completed) return;
     if (countdown === 0) {
       // Force logout to clear temporary recovery session, requiring fresh login
-      signOut().then(() => {
-        navigate('/admin/login');
-      });
+      signOut()
+        .catch((e) => console.error("SignOut error:", e))
+        .finally(() => {
+          navigate('/admin/login');
+        });
       return;
     }
 
@@ -90,7 +92,7 @@ export default function ResetPassword() {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [completed, countdown, navigate, signOut]);
+  }, [completed, countdown]); // Removed navigate and signOut to prevent infinite re-renders
 
   async function onSubmit(data) {
     setSubmitting(true);
