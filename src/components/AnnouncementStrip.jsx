@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
-import { useAnnouncements } from '../hooks/usePublicContent';
+import { useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPublicAnnouncements } from '../store/slices/publicAnnouncementsSlice';
 import './AnnouncementStrip.css';
 
 function buildMarqueeSequence(items) {
@@ -11,7 +12,13 @@ function buildMarqueeSequence(items) {
 }
 
 export default function AnnouncementStrip() {
-  const { announcements, loading } = useAnnouncements();
+  const dispatch = useDispatch();
+  const { items: announcements, loading } = useSelector((state) => state.publicAnnouncements);
+  
+  useEffect(() => {
+    dispatch(fetchPublicAnnouncements());
+  }, [dispatch]);
+
   const sequence = useMemo(
     () => (announcements.length ? buildMarqueeSequence(announcements) : []),
     [announcements],

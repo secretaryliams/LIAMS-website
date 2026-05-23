@@ -1,77 +1,74 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  fetchUpcomingEvents,
+  addUpcomingEvent,
+  toggleUpcomingEvent,
+  deleteUpcomingEvent,
+} from '../../store/slices/adminEventsSlice';
 import { formatEventDateLabel } from '../../lib/eventFormat';
 import { DEFAULT_EVENT_VENUE, formatEventVenue } from '../../lib/eventVenue';
 import { uploadEventImage } from '../../lib/storage';
-import { supabase } from '../../lib/supabase';
 import './Admin.css';
 
 export default function UpcomingEvents() {
-  const [rows, setRows] = useState([]);
+  const dispatch = useDispatch();
+  const { upcoming: rows, loadingUpcoming: loading, error } = useSelector((state) => state.adminEvents);
+  
   const [title, setTitle] = useState('');
   const [eventDate, setEventDate] = useState('');
   const [venue, setVenue] = useState('');
   const [formLink, setFormLink] = useState('');
   const [imageFile, setImageFile] = useState(null);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [localError, setLocalError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  const load = useCallback(async () => {
-    const { data, error: err } = await supabase
-      .from('upcoming_events')
-      .select('*')
-      .order('event_date', { ascending: true, nullsFirst: false });
-    if (err) setError(err.message);
-    else setRows(data ?? []);
-    setLoading(false);
-  }, []);
-
   useEffect(() => {
-    load();
-  }, [load]);
+    dispatch(fetchUpcomingEvents());
+  }, [dispatch]);
 
   async function handleAdd(e) {
     e.preventDefault();
-    setError('');
+    setLocalError('');
     setSubmitting(true);
     try {
       let imageUrl = null;
       if (imageFile) {
         imageUrl = await uploadEventImage(imageFile);
       }
-      const { error: err } = await supabase.from('upcoming_events').insert({
+      
+      const result = await dispatch(addUpcomingEvent({
         title: title.trim(),
         event_date: eventDate || null,
         venue: venue.trim() || null,
         form_link: formLink.trim() || null,
         image_url: imageUrl,
-      });
-      if (err) {
-        setError(err.message);
+      }));
+      
+      if (result.error) {
+        setLocalError(result.payload || 'Failed to add event');
         return;
       }
+      
       setTitle('');
       setEventDate('');
       setVenue('');
       setFormLink('');
       setImageFile(null);
-      load();
     } catch (err) {
-      setError(err.message || 'Upload failed');
+      setLocalError(err.message || 'Upload failed');
     } finally {
       setSubmitting(false);
     }
   }
 
-  async function handleToggle(id, enabled) {
-    await supabase.from('upcoming_events').update({ enabled: !enabled }).eq('id', id);
-    load();
+  function handleToggle(id, enabled) {
+    dispatch(toggleUpcomingEvent({ id, enabled }));
   }
 
-  async function handleDelete(id) {
+  function handleDelete(id) {
     if (!window.confirm('Delete this event?')) return;
-    await supabase.from('upcoming_events').delete().eq('id', id);
-    load();
+    dispatch(deleteUpcomingEvent(id));
   }
 
   return (
@@ -115,7 +112,7 @@ export default function UpcomingEvents() {
           {submitting ? 'Adding…' : 'Add event'}
         </button>
       </form>
-      {error && <p className="admin-error">{error}</p>}
+      {(error || localError) && <p className="admin-error">{error || localError}</p>}
       {loading ? (
         <p className="admin-muted">Loading…</p>
       ) : (

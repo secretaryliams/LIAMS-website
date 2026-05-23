@@ -1,48 +1,38 @@
-import { useCallback, useEffect, useState } from 'react';
-import { supabase } from '../../lib/supabase';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  fetchAnnouncements,
+  addAnnouncement,
+  toggleAnnouncement,
+  deleteAnnouncement,
+} from '../../store/slices/adminAnnouncementsSlice';
 import './Admin.css';
 
 export default function Announcements() {
-  const [rows, setRows] = useState([]);
+  const dispatch = useDispatch();
+  const { items: rows, loading, error } = useSelector((state) => state.adminAnnouncements);
   const [text, setText] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
-
-  const load = useCallback(async () => {
-    const { data, error: err } = await supabase
-      .from('announcements')
-      .select('*')
-      .order('created_at', { ascending: false });
-    if (err) setError(err.message);
-    else setRows(data ?? []);
-    setLoading(false);
-  }, []);
 
   useEffect(() => {
-    load();
-  }, [load]);
+    dispatch(fetchAnnouncements());
+  }, [dispatch]);
 
   async function handleAdd(e) {
     e.preventDefault();
-    setError('');
-    const { error: err } = await supabase.from('announcements').insert({ text: text.trim() });
-    if (err) {
-      setError(err.message);
-      return;
+    if (!text.trim()) return;
+    const result = await dispatch(addAnnouncement(text));
+    if (!result.error) {
+      setText('');
     }
-    setText('');
-    load();
   }
 
-  async function handleToggle(id, enabled) {
-    await supabase.from('announcements').update({ enabled: !enabled }).eq('id', id);
-    load();
+  function handleToggle(id, enabled) {
+    dispatch(toggleAnnouncement({ id, enabled }));
   }
 
-  async function handleDelete(id) {
+  function handleDelete(id) {
     if (!window.confirm('Delete this announcement?')) return;
-    await supabase.from('announcements').delete().eq('id', id);
-    load();
+    dispatch(deleteAnnouncement(id));
   }
 
   return (

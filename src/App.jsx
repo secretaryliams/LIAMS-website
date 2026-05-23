@@ -1,63 +1,66 @@
+import { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
-import Home from './pages/Home';
-import About from './pages/About';
-import Training from './pages/Training';
-import Research from './pages/Research';
-import Events from './pages/Events';
-import Collaborations from './pages/Collaborations';
-import Certificates from './pages/Certificates';
-import Contact from './pages/Contact';
 import ProtectedAdminRoute from './routes/ProtectedAdminRoute';
-import Login from './pages/admin/Login';
-import ForgotPassword from './pages/admin/ForgotPassword';
-<<<<<<< HEAD
-import ResetPassword from './pages/admin/ResetPassword';
-=======
-import UpdatePassword from './pages/admin/UpdatePassword';
->>>>>>> e0321e0dab8bad0ccfa8b89c5af7b4681dc5a1ec
-import AdminLayout from './pages/admin/AdminLayout';
-import Dashboard from './pages/admin/Dashboard';
-import Announcements from './pages/admin/Announcements';
-import UpcomingEvents from './pages/admin/UpcomingEvents';
-import PreviousEvents from './pages/admin/PreviousEvents';
-import Certifications from './pages/admin/Certifications';
+import Loader from './components/common/Loader';
+import AuthInitializer from './components/common/AuthInitializer';
 import './pages/Shared.css';
 import './pages/admin/Admin.css';
+
+// Lazy loaded public components
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const Training = lazy(() => import('./pages/Training'));
+const Research = lazy(() => import('./pages/Research'));
+const Events = lazy(() => import('./pages/Events'));
+const Collaborations = lazy(() => import('./pages/Collaborations'));
+const Certificates = lazy(() => import('./pages/Certificates'));
+const Contact = lazy(() => import('./pages/Contact'));
+
+// Lazy loaded admin components
+const Login = lazy(() => import('./pages/admin/Login'));
+const ForgotPassword = lazy(() => import('./pages/admin/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/admin/ResetPassword'));
+const InviteAdmin = lazy(() => import('./pages/admin/InviteAdmin'));
+const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'));
+const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
+const Announcements = lazy(() => import('./pages/admin/Announcements'));
+const UpcomingEvents = lazy(() => import('./pages/admin/UpcomingEvents'));
+const PreviousEvents = lazy(() => import('./pages/admin/PreviousEvents'));
+const Certifications = lazy(() => import('./pages/admin/Certifications'));
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
+      <AuthInitializer>
+        <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="about" element={<About />} />
-          <Route path="training" element={<Training />} />
-          <Route path="research" element={<Research />} />
-          <Route path="events" element={<Events />} />
-          <Route path="certificates" element={<Certificates />} />
-          <Route path="collaborations" element={<Collaborations />} />
-          <Route path="contact" element={<Contact />} />
+          <Route index element={<Suspense fallback={<Loader />}><Home /></Suspense>} />
+          <Route path="about" element={<Suspense fallback={<Loader />}><About /></Suspense>} />
+          <Route path="training" element={<Suspense fallback={<Loader />}><Training /></Suspense>} />
+          <Route path="research" element={<Suspense fallback={<Loader />}><Research /></Suspense>} />
+          <Route path="events" element={<Suspense fallback={<Loader />}><Events /></Suspense>} />
+          <Route path="certificates" element={<Suspense fallback={<Loader />}><Certificates /></Suspense>} />
+          <Route path="collaborations" element={<Suspense fallback={<Loader />}><Collaborations /></Suspense>} />
+          <Route path="contact" element={<Suspense fallback={<Loader />}><Contact /></Suspense>} />
         </Route>
 
-        <Route path="/admin/login" element={<Login />} />
-        <Route path="/admin/forgot-password" element={<ForgotPassword />} />
-<<<<<<< HEAD
-        <Route path="/admin/reset-password" element={<ResetPassword />} />
+        <Route path="/admin/login" element={<Suspense fallback={<Loader />}><Login /></Suspense>} />
+        <Route path="/admin/forgot-password" element={<Suspense fallback={<Loader />}><ForgotPassword /></Suspense>} />
+        <Route path="/admin/reset-password" element={<Suspense fallback={<Loader />}><ResetPassword /></Suspense>} />
+        <Route path="/admin/update-password" element={<Suspense fallback={<Loader />}><ResetPassword /></Suspense>} />
         <Route path="/admin" element={<ProtectedAdminRoute />}>
-=======
-        <Route path="/admin/update-password" element={<UpdatePassword />} />
-        <Route path="/admin" element={<ProtectedRoute />}>
->>>>>>> e0321e0dab8bad0ccfa8b89c5af7b4681dc5a1ec
-          <Route element={<AdminLayout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="announcements" element={<Announcements />} />
-            <Route path="upcoming-events" element={<UpcomingEvents />} />
-            <Route path="previous-events" element={<PreviousEvents />} />
-            <Route path="certifications" element={<Certifications />} />
+          <Route element={<Suspense fallback={<Loader />}><AdminLayout /></Suspense>}>
+            <Route index element={<Suspense fallback={<Loader />}><Dashboard /></Suspense>} />
+            <Route path="invite" element={<Suspense fallback={<Loader />}><InviteAdmin /></Suspense>} />
+            <Route path="announcements" element={<Suspense fallback={<Loader />}><Announcements /></Suspense>} />
+            <Route path="upcoming-events" element={<Suspense fallback={<Loader />}><UpcomingEvents /></Suspense>} />
+            <Route path="previous-events" element={<Suspense fallback={<Loader />}><PreviousEvents /></Suspense>} />
+            <Route path="certifications" element={<Suspense fallback={<Loader />}><Certifications /></Suspense>} />
           </Route>
         </Route>
-      </Routes>
+        </Routes>
+      </AuthInitializer>
     </BrowserRouter>
   );
 }

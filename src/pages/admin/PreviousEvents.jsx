@@ -1,62 +1,58 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  fetchPreviousEvents,
+  addPreviousEvent,
+  deletePreviousEvent,
+} from '../../store/slices/adminEventsSlice';
 import { uploadEventImage } from '../../lib/storage';
-import { supabase } from '../../lib/supabase';
 import './Admin.css';
 
 export default function PreviousEvents() {
-  const [rows, setRows] = useState([]);
+  const dispatch = useDispatch();
+  const { previous: rows, loadingPrevious: loading, error } = useSelector((state) => state.adminEvents);
+
   const [category, setCategory] = useState('');
   const [caption, setCaption] = useState('');
   const [file, setFile] = useState(null);
-  const [error, setError] = useState('');
+  const [localError, setLocalError] = useState('');
   const [uploading, setUploading] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  const load = useCallback(async () => {
-    const { data, error: err } = await supabase
-      .from('previous_events')
-      .select('*')
-      .order('created_at', { ascending: false });
-    if (err) setError(err.message);
-    else setRows(data ?? []);
-    setLoading(false);
-  }, []);
 
   useEffect(() => {
-    load();
-  }, [load]);
+    dispatch(fetchPreviousEvents());
+  }, [dispatch]);
 
   async function handleAdd(e) {
     e.preventDefault();
     if (!file) {
-      setError('Choose an image to upload.');
+      setLocalError('Choose an image to upload.');
       return;
     }
-    setError('');
+    setLocalError('');
     setUploading(true);
     try {
       const imageUrl = await uploadEventImage(file);
-      const { error: err } = await supabase.from('previous_events').insert({
+      const result = await dispatch(addPreviousEvent({
         image_url: imageUrl,
         category: category.trim() || null,
         caption: caption.trim() || null,
-      });
-      if (err) throw new Error(err.message);
+      }));
+      
+      if (result.error) throw new Error(result.payload || 'Failed to add event');
+      
       setCategory('');
       setCaption('');
       setFile(null);
-      load();
     } catch (err) {
-      setError(err.message || 'Upload failed');
+      setLocalError(err.message || 'Upload failed');
     } finally {
       setUploading(false);
     }
   }
 
-  async function handleDelete(id) {
+  function handleDelete(id) {
     if (!window.confirm('Delete this gallery item?')) return;
-    await supabase.from('previous_events').delete().eq('id', id);
-    load();
+    dispatch(deletePreviousEvent(id));
   }
 
   return (
@@ -88,7 +84,7 @@ export default function PreviousEvents() {
           {uploading ? 'Uploading…' : 'Upload'}
         </button>
       </form>
-      {error && <p className="admin-error">{error}</p>}
+      {(error || localError) && <p className="admin-error">{error || localError}</p>}
       {loading ? (
         <p className="admin-muted">Loading…</p>
       ) : (

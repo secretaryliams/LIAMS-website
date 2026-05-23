@@ -124,8 +124,9 @@ export const authService = {
     if (error) throw error;
 
     try {
-      const token = data?.session?.access_token;
-      const email = data?.user?.email;
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      const email = data?.user?.email || session?.user?.email;
       if (email && token) {
         await this.logAuthEvent(email, 'success', 'password_update_success', token);
       }
@@ -134,6 +135,30 @@ export const authService = {
     }
 
     return data;
+  },
+
+  /**
+   * Invites a new admin (restricted to super_admin)
+   * @param {string} email 
+   * @param {string} name 
+   * @param {string} token 
+   */
+  async inviteAdmin(email, name, token) {
+    const response = await fetch(`${API_BASE}/invite`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ email, name })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to send invitation');
+    }
+
+    return await response.json();
   },
 
   /**

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { authService } from "../../services/authService";
 import "./Admin.css";
 
 export default function ForgotPassword() {
@@ -15,7 +16,7 @@ export default function ForgotPassword() {
     setError("");
     setSubmitting(true);
     try {
-      await resetPassword(email);
+      await authService.forgotPassword(email);
       setSuccess(true);
     } catch (err) {
       setError(err.message || "Failed to send reset email");
@@ -30,9 +31,7 @@ export default function ForgotPassword() {
         <div className="admin-card admin-card--narrow">
           <h2>Check your email</h2>
           <p className="admin-muted">
-            If an account exists for <strong>{email}</strong>, we've sent a
-            password reset link. Please check your inbox and follow the
-            instructions.
+            If account exists, reset link sent.
           </p>
           <p className="admin-muted">
             Didn't receive the email? Check your spam folder or try again.

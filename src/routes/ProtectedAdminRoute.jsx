@@ -1,11 +1,15 @@
 // LIAMS Secure RBAC Router Guard
 // Path: src/routes/ProtectedAdminRoute.jsx
 
+import { useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 
 export default function ProtectedAdminRoute() {
   const { session, profile, loading, isConfigured, signOut } = useAuth();
+  const toast = useToast();
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   // 1. Check if Supabase keys are configured in local environment
   if (!isConfigured) {
@@ -62,17 +66,37 @@ export default function ProtectedAdminRoute() {
       <div className="admin-page" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div className="admin-card admin-card--narrow" style={{ textAlign: 'center' }}>
           <h2 style={{ color: '#ef4444', marginBottom: '1rem' }}>Access Forbidden</h2>
-          <p className="admin-muted" style={{ marginBottom: '1.5rem' }}>
+          <p className="admin-muted" style={{ marginBottom: '1rem' }}>
             This account is registered but does not have active administrative clearances. 
             If you believe this is an error, contact the system administrator.
           </p>
+          <div style={{ background: '#f8fafc', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem', textAlign: 'left', fontSize: '0.85rem', color: '#64748b', wordBreak: 'break-all' }}>
+            <strong>Debug Info:</strong><br/>
+            Email: {session?.user?.email}<br/>
+            User ID: {session?.user?.id}<br/>
+            Profile Found: {profile ? 'Yes' : 'No'}<br/>
+            {profile && <>
+              Role: {profile.role}<br/>
+              Active: {profile.is_active ? 'Yes' : 'No'}
+            </>}
+          </div>
           <button 
             type="button" 
             className="btn btn--danger" 
-            onClick={() => signOut()}
+            disabled={isSigningOut}
+            onClick={async () => {
+              setIsSigningOut(true);
+              try {
+                await signOut();
+                toast.success('Successfully signed out.');
+              } catch (err) {
+                toast.error(err.message || 'Failed to sign out.');
+                setIsSigningOut(false);
+              }
+            }}
             style={{ width: '100%' }}
           >
-            Sign Out
+            {isSigningOut ? 'Signing Out...' : 'Sign Out'}
           </button>
         </div>
       </div>

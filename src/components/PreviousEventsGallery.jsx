@@ -1,9 +1,10 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPublicPreviousEvents } from '../store/slices/publicEventsSlice';
 import ImageLightbox from './ImageLightbox';
 import { Autoplay, Navigation, Pagination, A11y } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import EmptyState from './EmptyState';
-import { usePreviousEvents } from '../hooks/usePublicContent';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -34,11 +35,16 @@ function CarouselNavIcon({ direction }) {
 }
 
 export default function PreviousEventsGallery() {
-  const { items, loading } = usePreviousEvents();
+  const dispatch = useDispatch();
+  const { previous: items, loadingPrevious: loading } = useSelector((state) => state.publicEvents);
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const paginationRef = useRef(null);
   const [lightbox, setLightbox] = useState(null);
+
+  useEffect(() => {
+    dispatch(fetchPublicPreviousEvents());
+  }, [dispatch]);
 
   if (loading) {
     return <p className="events-gallery__empty">Loading gallery…</p>;

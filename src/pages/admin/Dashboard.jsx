@@ -75,13 +75,6 @@ export default function Dashboard() {
   const { sectionTitle: certsSectionTitle } =
     useCertificationsSectionTitle();
 
-  const [data, setData] = useState({
-    announcements: [],
-    upcoming: [],
-    previous: [],
-    certifications: [],
-  });
-
   const [announcements, setAnnouncements] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
   const [previous, setPrevious] = useState([]);
@@ -143,36 +136,7 @@ export default function Dashboard() {
     };
 
     fetchData();
-  }, []);
-
-  async function remove(table, id) {
-    try {
-      if (
-        typeof window !== "undefined" &&
-        !window.confirm("Delete this item permanently?")
-      ) {
-        return;
-      }
-
-      const { error } = await supabase.from(table).delete().eq("id", id);
-
-      if (error) {
-        setError(error.message);
-        return;
-      }
-
-      load();
-    } catch (err) {
-      setError(err.message || "Failed to delete item");
-    }
-  }
-
-  init();
-
-  return () => {
-    mounted = false;
-  };
-}, [load]);
+  }, [load]);
 
   const remove = useCallback(
     async (table, id) => {
@@ -199,13 +163,6 @@ export default function Dashboard() {
     },
     [load]
   );
-
-  const {
-    announcements,
-    upcoming,
-    previous,
-    certifications,
-  } = data;
 
   return (
     <div className="admin-dashboard">

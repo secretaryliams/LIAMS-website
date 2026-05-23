@@ -4,12 +4,19 @@ import PageHero from '../components/PageHero';
 import PreviousEventsGallery from '../components/PreviousEventsGallery';
 import Reveal from '../components/motion/Reveal';
 import StaggerGrid from '../components/motion/StaggerGrid';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPublicUpcomingEvents } from '../store/slices/publicEventsSlice';
 import { eventsExpertise, eventsPartnerText } from '../data/siteData';
-import { useUpcomingEvents } from '../hooks/usePublicContent';
 import './Events.css';
 
 export default function Events() {
-  const { events, loading } = useUpcomingEvents();
+  const dispatch = useDispatch();
+  const { upcoming: events, loadingUpcoming: loading } = useSelector((state) => state.publicEvents);
+
+  useEffect(() => {
+    dispatch(fetchPublicUpcomingEvents());
+  }, [dispatch]);
 
   return (
     <>
