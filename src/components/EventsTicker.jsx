@@ -1,7 +1,9 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPublicUpcomingEvents } from '../store/slices/publicEventsSlice';
 import EmptyState from './EmptyState';
 import Reveal from './motion/Reveal';
-import { useUpcomingEvents } from '../hooks/usePublicContent';
 import './EventsTicker.css';
 
 const EVENT_TAGS = ['Conferences', 'Symposia', 'Training'];
@@ -35,7 +37,13 @@ function EventCard({ event }) {
 }
 
 export default function EventsTicker() {
-  const { events, loading } = useUpcomingEvents();
+  const dispatch = useDispatch();
+  const { upcoming: events, loadingUpcoming: loading } = useSelector((state) => state.publicEvents);
+
+  useEffect(() => {
+    dispatch(fetchPublicUpcomingEvents());
+  }, [dispatch]);
+
   const items = events.length ? [...events, ...events] : [];
   const nextEvent = events[0];
 

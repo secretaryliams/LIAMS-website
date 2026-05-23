@@ -2,13 +2,20 @@ import { Link } from 'react-router-dom';
 import PageHero from '../components/PageHero';
 import EmptyState from '../components/EmptyState';
 import Reveal from '../components/motion/Reveal';
-import { useCertifications } from '../hooks/usePublicContent';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPublicCertifications } from '../store/slices/publicCertificationsSlice';
 import { useCertificationsSectionTitle } from '../hooks/useSiteSettings';
 import './Certificates.css';
 
 export default function Certificates() {
-  const { certifications, loading } = useCertifications();
+  const dispatch = useDispatch();
+  const { items: certifications, loading } = useSelector((state) => state.publicCertifications);
   const { sectionTitle } = useCertificationsSectionTitle();
+
+  useEffect(() => {
+    dispatch(fetchPublicCertifications());
+  }, [dispatch]);
 
   return (
     <>

@@ -213,9 +213,9 @@ export default function Login() {
                 'Sign In'
               )}
             </button>
-            <p className="admin-muted" style={{ marginTop: '1rem', textAlign: 'center' }}>
+            {/* <p className="admin-muted" style={{ marginTop: '1rem', textAlign: 'center' }}>
               <Link to="/admin/forgot-password">Forgot password?</Link>
-            </p>
+            </p> */}
           </form>
         )}
 

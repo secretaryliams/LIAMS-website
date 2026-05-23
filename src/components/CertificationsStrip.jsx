@@ -1,14 +1,21 @@
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPublicCertifications } from '../store/slices/publicCertificationsSlice';
 import EmptyState from './EmptyState';
 import Reveal from './motion/Reveal';
 import StaggerGrid from './motion/StaggerGrid';
-import { useCertifications } from '../hooks/usePublicContent';
 import { useCertificationsSectionTitle } from '../hooks/useSiteSettings';
 import { CERTIFICATIONS_SECTION_ID } from '../lib/siteSettingsKeys';
 import './CertificationsStrip.css';
 
 export default function CertificationsStrip() {
-  const { certifications, loading } = useCertifications();
+  const dispatch = useDispatch();
+  const { items: certifications, loading } = useSelector((state) => state.publicCertifications);
   const { sectionTitle } = useCertificationsSectionTitle();
+
+  useEffect(() => {
+    dispatch(fetchPublicCertifications());
+  }, [dispatch]);
 
   return (
     <section

@@ -92,6 +92,12 @@ const lockoutCheckLimiter = rateLimit({
   message: { error: 'Too many verification attempts. Please try again later.' }
 });
 
+const inviteLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: { error: 'Too many invitations sent. Please wait 15 minutes.' }
+});
+
 app.use('/api/', generalLimiter);
 
 // 4. Secure Endpoints
@@ -115,6 +121,68 @@ async function logAuditEvent(userId, action, req) {
     console.error('Failed to write to audit_logs:', err.message);
   }
 }
+
+// Endpoint: Invite Admin (Super Admin Only RBAC)
+app.post('/api/auth/invite', inviteLimiter, async (req, res) => {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Unauthorized: Session token required' });
+  }
+
+  const token = authHeader.substring(7);
+  const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+  if (authError || !user) {
+    return res.status(401).json({ error: 'Unauthorized: Session is invalid or has expired' });
+  }
+
+  // Verify caller's role in DB
+  const { data: caller, error: dbError } = await supabase
+    .from('admin_users')
+    .select('role, is_active')
+    .eq('id', user.id)
+    .maybeSingle();
+
+  if (dbError || !caller) {
+    return res.status(403).json({ error: 'Forbidden: Admin profile not found' });
+  }
+
+  if (!caller.is_active || caller.role !== 'super_admin') {
+    return res.status(403).json({ error: 'Forbidden: Only active super_admins can invite users' });
+  }
+
+  const schema = z.object({
+    email: z.string().email('Invalid email address'),
+    name: z.string().min(1, 'Name is required')
+  });
+
+  const parsed = schema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: parsed.error.issues[0].message });
+  }
+
+  const { email, name } = parsed.data;
+
+  try {
+    const { error: inviteError } = await supabase.auth.admin.inviteUserByEmail(email, {
+      data: {
+        full_name: name,
+        is_admin: 'true'
+      },
+      redirectTo: `${clientUrl}/admin/reset-password`
+    });
+
+    if (inviteError) {
+      console.error('Supabase admin invitation API failed:', inviteError.message);
+      return res.status(400).json({ error: inviteError.message });
+    }
+
+    await logAuditEvent(user.id, `invited_new_admin: ${email} (${name})`, req);
+    return res.status(200).json({ success: true, message: 'User invited successfully.' });
+  } catch (err) {
+    console.error('System error in invite handler:', err);
+    return res.status(500).json({ error: 'Failed to complete invite' });
+  }
+});
 
 // Endpoint A: Forgot Password Handler (Enumeration Proof)
 app.post('/api/auth/forgot-password', forgotPasswordLimiter, async (req, res) => {

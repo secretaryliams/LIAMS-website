@@ -1,5 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { AnimatePresence } from 'framer-motion';
+import {
+  fetchCertifications,
+  addCertification,
+  deleteCertification,
+} from '../../store/slices/adminCertificationsSlice';
 import {
   DEFAULT_CERTIFICATIONS_SECTION_TITLE,
 } from '../../lib/siteSettingsKeys';
@@ -7,35 +13,25 @@ import {
   saveCertificationsSectionTitle,
   useCertificationsSectionTitle,
 } from '../../hooks/useSiteSettings';
-import { supabase } from '../../lib/supabase';
 import AnimatedListItem from '../../components/motion/AnimatedListItem';
 import Reveal from '../../components/motion/Reveal';
 import './Admin.css';
 
 export default function Certifications() {
+  const dispatch = useDispatch();
+  const { items: rows, loading, error } = useSelector((state) => state.adminCertifications);
+
   const { sectionTitle, refresh: refreshTitle } = useCertificationsSectionTitle();
   const [sectionTitleInput, setSectionTitleInput] = useState('');
-  const [rows, setRows] = useState([]);
   const [title, setTitle] = useState('');
   const [driveLink, setDriveLink] = useState('');
-  const [error, setError] = useState('');
+  const [localError, setLocalError] = useState('');
   const [settingsMsg, setSettingsMsg] = useState('');
-  const [loading, setLoading] = useState(true);
   const [savingTitle, setSavingTitle] = useState(false);
 
-  const load = useCallback(async () => {
-    const { data, error: err } = await supabase
-      .from('certifications')
-      .select('*')
-      .order('created_at', { ascending: false });
-    if (err) setError(err.message);
-    else setRows(data ?? []);
-    setLoading(false);
-  }, []);
-
   useEffect(() => {
-    load();
-  }, [load]);
+    dispatch(fetchCertifications());
+  }, [dispatch]);
 
   useEffect(() => {
     setSectionTitleInput(sectionTitle);
@@ -58,24 +54,23 @@ export default function Certifications() {
 
   async function handleAdd(e) {
     e.preventDefault();
-    setError('');
-    const { error: err } = await supabase.from('certifications').insert({
+    setLocalError('');
+    const result = await dispatch(addCertification({
       title: title.trim(),
       drive_link: driveLink.trim() || null,
-    });
-    if (err) {
-      setError(err.message);
+    }));
+    
+    if (result.error) {
+      setLocalError(result.payload || 'Failed to add certification');
       return;
     }
     setTitle('');
     setDriveLink('');
-    load();
   }
 
-  async function handleDelete(id) {
+  function handleDelete(id) {
     if (!window.confirm('Delete this certification entry?')) return;
-    await supabase.from('certifications').delete().eq('id', id);
-    load();
+    dispatch(deleteCertification(id));
   }
 
   return (
@@ -132,7 +127,7 @@ export default function Certifications() {
             Add
           </button>
         </form>
-        {error && <p className="admin-error">{error}</p>}
+        {(error || localError) && <p className="admin-error">{error || localError}</p>}
         {loading ? (
           <p className="admin-muted">Loading…</p>
         ) : (
