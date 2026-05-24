@@ -26,14 +26,6 @@ export default function Events() {
         subtitle="Global Platforms for Knowledge Sharing and Networking"
       />
 
-      <section id="our-expertise" className="section">
-        <Reveal className="container content-block">
-          <span className="section__label">Our Expertise</span>
-          <h2>Our Expertise</h2>
-          <p>{eventsExpertise}</p>
-        </Reveal>
-      </section>
-
       <section id="upcoming-events" className="section section--alt">
         <div className="container">
           <Reveal className="section__header">
@@ -87,7 +79,15 @@ export default function Events() {
         </div>
       </section>
 
-      <section id="partner-events" className="section section--alt">
+      <section id="our-expertise" className="section section--alt">
+        <Reveal className="container content-block">
+          <span className="section__label">Our Expertise</span>
+          <h2>Our Expertise</h2>
+          <p>{eventsExpertise}</p>
+        </Reveal>
+      </section>
+
+      <section id="partner-events" className="section">
         <Reveal className="container content-block">
           <h2>Partner with us for your next Event</h2>
           <p>{eventsPartnerText}</p>

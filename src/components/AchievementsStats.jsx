@@ -93,7 +93,7 @@ export default function AchievementsStats() {
           </div>
 
           {/* Card 2: Publication & Research */}
-          <div className="stats-card stats-card--wide">
+          <div className="stats-card">
             <div className="stats-card__header">
               <h3>Publication / Research Support</h3>
               <div className="stats-card__total">

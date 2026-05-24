@@ -39,7 +39,7 @@
 
 .hero__badge {
   display: inline-block;
-  font-size: 0.8rem;
+  font-size: 1.15rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -89,9 +89,10 @@
 }
 
 .introduction-media {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 240px;
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 12px 36px -12px rgba(15, 76, 129, 0.15), 0 4px 16px -8px rgba(15, 76, 129, 0.08);
@@ -108,8 +109,6 @@
 .introduction-media__image {
   width: 100%;
   height: 100%;
-  min-height: 280px;
-  max-height: 420px;
   object-fit: cover;
   display: block;
   transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
@@ -147,6 +146,11 @@
 
   .introduction-grid {
     grid-template-columns: 1fr;
+  }
+
+  .introduction-media {
+    height: auto;
+    max-height: none;
   }
 
   .introduction-media__placeholder {
@@ -386,8 +390,10 @@
   color: var(--navy);
   font-weight: 600;
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.4;
   margin: 0;
+  text-align: center;
+  text-wrap: balance;
   animation: fade-in-up 0.6s ease-out 0.1s both;
 }
 

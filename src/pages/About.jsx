@@ -52,7 +52,7 @@ export default function About() {
             <h2>Vision & Mission</h2>
           </Reveal>
           <div className="vision-mission-grid">
-            <article className="intro-card intro-card--with-media intro-card--vision">
+            <article className="intro-card intro-card--gold intro-card--with-media intro-card--vision">
               <div className="intro-card__content">
                 <h3>Vision</h3>
                 <p>{vision}</p>

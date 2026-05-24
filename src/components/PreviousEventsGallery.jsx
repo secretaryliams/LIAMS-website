@@ -112,17 +112,19 @@ export default function PreviousEventsGallery() {
           }}
           onSwiper={(swiper) => {
             setTimeout(() => {
-              if (typeof swiper.params.navigation !== 'boolean') {
-                swiper.params.navigation.prevEl = prevRef.current;
-                swiper.params.navigation.nextEl = nextRef.current;
-                swiper.navigation.init();
-                swiper.navigation.update();
-              }
-              if (typeof swiper.params.pagination !== 'boolean') {
-                swiper.params.pagination.el = paginationRef.current;
-                swiper.pagination.init();
-                swiper.pagination.render();
-                swiper.pagination.update();
+              if (swiper && swiper.params && !swiper.destroyed) {
+                if (typeof swiper.params.navigation !== 'boolean') {
+                  swiper.params.navigation.prevEl = prevRef.current;
+                  swiper.params.navigation.nextEl = nextRef.current;
+                  swiper.navigation?.init();
+                  swiper.navigation?.update();
+                }
+                if (typeof swiper.params.pagination !== 'boolean') {
+                  swiper.params.pagination.el = paginationRef.current;
+                  swiper.pagination?.init();
+                  swiper.pagination?.render();
+                  swiper.pagination?.update();
+                }
               }
             });
           }}

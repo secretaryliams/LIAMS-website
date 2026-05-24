@@ -22,6 +22,7 @@
 
 .marquee-row__track {
   display: flex;
+  align-items: stretch;
   gap: 1.25rem;
   width: max-content;
   animation: marquee-left 95s linear infinite;
@@ -43,6 +44,8 @@
   border-radius: var(--radius);
   padding: 1.5rem;
   box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
 }
 
 .marquee-card p {
@@ -51,6 +54,11 @@
   color: var(--text-body);
   margin-bottom: 1rem;
   line-height: 1.55;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .marquee-card footer {
