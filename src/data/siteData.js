@@ -447,7 +447,7 @@ export const ourStory =
 export const leadershipParagraph =
   'Our foundational strength lies in our multidisciplinary leadership. The institute is driven by academicians and industry experts with deep technical backgrounds spanning Information and Communication Engineering, Electrical Engineering, Mechanical Engineering, Chemical Engineering, Basic Sciences and Mathematics. This diverse expertise enables us to foster true cross-disciplinary innovation, drawing on profound expertise in cutting-edge domains.';
 
-export const directorPhoto = '/images/director.jpg';
+export const directorPhoto = '/images/director.png';
 
 export const advisoryBoard = [
   { name: 'Dr. M. Balaji, M.E., Ph.D.', designation: 'Professor, SSN College of Engineering, Chennai', field: 'Academic Research Leadership' },

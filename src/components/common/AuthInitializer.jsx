@@ -24,7 +24,13 @@ export default function AuthInitializer({ children }) {
         console.log(`Auth state changed: ${event}`);
         if (!active) return;
 
-        if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'SIGNED_OUT') {
+        if (
+          event === 'SIGNED_IN' ||
+          event === 'TOKEN_REFRESHED' ||
+          event === 'SIGNED_OUT' ||
+          event === 'PASSWORD_RECOVERY' ||
+          event === 'USER_UPDATED'
+        ) {
            dispatch(initializeAuth(session));
         }
       }

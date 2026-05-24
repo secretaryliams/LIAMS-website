@@ -16,13 +16,6 @@ import './About.css';
 export default function About() {
   const [directorImageError, setDirectorImageError] = useState(false);
 
-  const getInitials = (name) =>
-    name
-      .split(' ')
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((part) => part[0].toUpperCase())
-      .join('');
 
   return (
     <>
@@ -150,21 +143,12 @@ export default function About() {
             <span className="section__label">Governance</span>
             <h2>Advisory Board</h2>
           </Reveal>
-          <StaggerGrid className="grid grid--2 board-cards-grid">
-            {advisoryBoard.map(({ name, designation, field, photo }) => (
+          <StaggerGrid className="grid grid--3 board-cards-grid">
+            {advisoryBoard.map(({ name, designation, field }) => (
               <article
                 key={name}
-                className={`card board-card ${photo ? 'board-card--with-photo' : 'board-card--placeholder'}`}
+                className="card board-card"
               >
-                <div className="board-card__photo">
-                  {photo ? (
-                    <img src={photo} alt={name} loading="lazy" />
-                  ) : (
-                    <div className="board-card__photo-placeholder">
-                      {getInitials(name)}
-                    </div>
-                  )}
-                </div>
                 <div className="board-card__body">
                   <h3>{name}</h3>
                   <p className="board-card__designation">{designation}</p>

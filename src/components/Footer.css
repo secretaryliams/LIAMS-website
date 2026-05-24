@@ -6,9 +6,9 @@
 
 .footer__grid {
   display: grid;
-  grid-template-columns: 1.2fr 1fr 1fr;
+  grid-template-columns: 1.5fr 1fr 1.2fr 1.5fr;
   gap: 2.5rem;
-  padding: 3.5rem 0 2.5rem;
+  padding: 4rem 0 3rem;
 }
 
 .footer h4 {
@@ -77,9 +77,56 @@
   font-style: italic;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+  .footer__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 640px) {
   .footer__grid {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
+}
+
+.footer__email-span {
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.footer__contact-item {
+  margin-bottom: 0.85rem !important;
+}
+
+.footer__contact-item strong {
+  color: var(--gold);
+  display: block;
+  margin-bottom: 0.15rem;
+}
+
+.footer__offices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.footer__office-item h5 {
+  color: var(--white);
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin: 0 0 0.15rem 0;
+}
+
+.footer__office-item p {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.8rem !important;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.footer__credentials-note {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.55);
 }

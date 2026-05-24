@@ -51,9 +51,6 @@ function NavItem({
               {sectionLabel}
             </Link>
           ))}
-          {isOnPage && (
-            <span className="header__submenu-hint">Jump to section on this page</span>
-          )}
         </div>
       )}
     </li>

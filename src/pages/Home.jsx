@@ -13,6 +13,7 @@ import EventsTicker from '../components/EventsTicker';
 import TestimonialMarquee from '../components/TestimonialMarquee';
 import Reveal from '../components/motion/Reveal';
 import StaggerGrid from '../components/motion/StaggerGrid';
+import AchievementsStats from '../components/AchievementsStats';
 import './Home.css';
 
 export default function Home() {
@@ -151,6 +152,8 @@ export default function Home() {
         </div>
       </section>
 
+      <AchievementsStats />
+
       <section id="what-we-offer" className="section section--alt">
         <div className="container">
           <Reveal className="section__header">
@@ -173,7 +176,6 @@ export default function Home() {
           </StaggerGrid>
         </div>
       </section>
-
       <div id="upcoming-events">
         <EventsTicker />
       </div>

@@ -27,19 +27,38 @@ export default function Footer() {
         </div>
 
         <div>
-          <h4>Contact</h4>
+          <h4>Get In Touch</h4>
           <address className="footer__contact">
-            <p>{institute.contact.address}</p>
-            <p>
-              <a href={`mailto:${institute.contact.email}`}>{institute.contact.email}</a>
-            </p>
-            <p>
+            <p className="footer__contact-item">
+              <strong>Phone:</strong>
               <a href={`tel:${institute.contact.phone.replace(/\s/g, '')}`}>
                 {institute.contact.phone}
               </a>
             </p>
-            <p>{institute.contact.hours}</p>
+            <p className="footer__contact-item">
+              <strong>Emails:</strong>
+              {institute.contact.emails.map((email) => (
+                <span key={email} className="footer__email-span">
+                  <a href={`mailto:${email}`}>{email}</a>
+                </span>
+              ))}
+            </p>
+            <p className="footer__contact-item">
+              <strong>Hours:</strong> {institute.contact.hours}
+            </p>
           </address>
+        </div>
+
+        <div>
+          <h4>Our Offices</h4>
+          <div className="footer__offices">
+            {institute.contact.offices.map((office) => (
+              <div key={office.id} className="footer__office-item">
+                <h5>{office.name}</h5>
+                <p>{office.address}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -47,6 +66,9 @@ export default function Footer() {
         <div className="container footer__bottom-inner">
           <p>
             &copy; {year} {institute.name}. All rights reserved.
+          </p>
+          <p className="footer__credentials-note">
+            ISO 9001:2015 & ISO 21001:2018 Certified | MSME Registered | StartupTN Recognized
           </p>
         </div>
       </div>

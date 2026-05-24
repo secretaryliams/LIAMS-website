@@ -5,7 +5,7 @@ import AdminPageTransition from '../../components/motion/AdminPageTransition';
 import './Admin.css';
 
 export default function AdminLayout() {
-  const { signOut, profile } = useAuth();
+  const { signOut } = useAuth();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -14,10 +14,8 @@ export default function AdminLayout() {
     navigate('/admin/login');
   }
 
-  const isSuperAdmin = profile?.role === 'super_admin';
   const visibleLinks = [
     { to: '/admin', label: 'Dashboard', end: true },
-    isSuperAdmin && { to: '/admin/invite', label: 'Invite Admin' },
     { to: '/admin/announcements', label: 'Announcements' },
     { to: '/admin/upcoming-events', label: 'Upcoming Events' },
     { to: '/admin/previous-events', label: 'Previous Events' },
