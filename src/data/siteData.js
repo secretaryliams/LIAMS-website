@@ -56,6 +56,7 @@ export const navLinks = [
 
 export const pageNavSections = {
   '/': [
+    { id: 'introduction', label: 'Who We Are' },
     { id: 'what-we-offer', label: 'What We Offer' },
     { id: 'upcoming-events', label: 'Upcoming Events' },
     { id: 'testimonials', label: 'Testimonials' },
@@ -83,10 +84,10 @@ export const pageNavSections = {
     { id: 'ipr', label: 'IPR Consulting' },
   ],
   '/events': [
-    { id: 'our-expertise', label: 'Our Expertise' },
     { id: 'upcoming-events', label: 'Upcoming Events' },
     { id: 'previous-events', label: 'Previous Events Gallery' },
     { id: 'partner-events', label: 'Partner With Us' },
+    { id: 'our-expertise', label: 'Our Expertise' },
   ],
   '/certificates': [
     { id: 'certifications', label: 'Certificates' },
@@ -511,7 +512,7 @@ export const researchSections = [
   {
     id: 'conferences',
     title: 'Conferences',
-    image: '/images/research/conferences.png',
+    image: '/images/research/conferences_uploaded.jpg',
     text: 'We host premier gatherings (International/National Level Conferences or workshops) that bring together global thought leaders, providing scholars the opportunity to present their findings, publish in recognized proceedings, and network with peers.',
   },
   {

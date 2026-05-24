@@ -124,8 +124,8 @@
 
 .header__nav ul a:hover,
 .header__nav ul a.active {
-  color: var(--blue);
-  background: var(--blue-soft);
+  color: var(--gold-dark);
+  background: rgba(197, 160, 89, 0.08);
 }
 
 .header__nav ul a.active {
@@ -176,8 +176,8 @@
 }
 
 .header__submenu-link:hover {
-  background: var(--blue-soft) !important;
-  color: var(--blue) !important;
+  background: rgba(197, 160, 89, 0.08) !important;
+  color: var(--gold-dark) !important;
 }
 
 .header__submenu-hint {
