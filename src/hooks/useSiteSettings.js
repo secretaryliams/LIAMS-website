@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPublicCertifications } from '../store/slices/publicCertificationsSlice';
 import {
   DEFAULT_CERTIFICATIONS_SECTION_TITLE,
   SITE_SETTING_KEYS,
@@ -18,32 +20,19 @@ function isSiteSettingsTableMissing(error) {
 }
 
 export function useCertificationsSectionTitle() {
-  const [sectionTitle, setSectionTitle] = useState(DEFAULT_CERTIFICATIONS_SECTION_TITLE);
-  const [loading, setLoading] = useState(true);
-
-  const load = useCallback(async () => {
-    if (!supabase) {
-      setLoading(false);
-      return;
-    }
-
-    const { data, error } = await supabase
-      .from('site_settings')
-      .select('value')
-      .eq('key', SITE_SETTING_KEYS.CERTIFICATIONS_SECTION_TITLE)
-      .maybeSingle();
-
-    if (!error && data?.value?.trim()) {
-      setSectionTitle(data.value.trim());
-    } else if (!error || isSiteSettingsTableMissing(error)) {
-      setSectionTitle(DEFAULT_CERTIFICATIONS_SECTION_TITLE);
-    }
-    setLoading(false);
-  }, []);
+  const dispatch = useDispatch();
+  const { sectionTitle, loading, items } = useSelector((state) => state.publicCertifications);
 
   useEffect(() => {
-    load();
-  }, [load]);
+    // Load public certifications and settings title if not fetched yet
+    if (items.length === 0 && sectionTitle === DEFAULT_CERTIFICATIONS_SECTION_TITLE) {
+      dispatch(fetchPublicCertifications());
+    }
+  }, [dispatch, items.length, sectionTitle]);
+
+  const load = useCallback(async () => {
+    await dispatch(fetchPublicCertifications());
+  }, [dispatch]);
 
   return { sectionTitle, loading, refresh: load };
 }

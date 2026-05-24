@@ -10,6 +10,8 @@ import {
   leadershipParagraph,
   directorPhoto,
   advisoryBoard,
+  vision,
+  missionPoints,
 } from '../data/siteData';
 import './About.css';
 
@@ -40,6 +42,51 @@ export default function About() {
           <Reveal delay={0.1} className="about-symbol">
             <img src="/logos/liams-logo-symbol.png" alt="" aria-hidden="true" />
           </Reveal>
+        </div>
+      </section>
+
+      <section id="vision-mission" className="section section--alt">
+        <div className="container">
+          <Reveal className="section__header">
+            <span className="section__label">Purpose</span>
+            <h2>Vision & Mission</h2>
+          </Reveal>
+          <div className="vision-mission-grid">
+            <article className="intro-card intro-card--with-media intro-card--vision">
+              <div className="intro-card__content">
+                <h3>Vision</h3>
+                <p>{vision}</p>
+              </div>
+              <div className="intro-card__media">
+                <img
+                  src="/images/about_vision.png"
+                  alt="LIAMS Vision of research and education excellence in a state-of-the-art laboratory"
+                  className="intro-card__image"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            </article>
+            <article className="intro-card intro-card--gold intro-card--with-media intro-card--mission">
+              <div className="intro-card__media">
+                <img
+                  src="/images/about_mission.png"
+                  alt="LIAMS Mission of multidisciplinary collaborative research and teaching"
+                  className="intro-card__image"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div className="intro-card__content">
+                <h3>Mission</h3>
+                <ul className="mission-list">
+                  {missionPoints.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+          </div>
         </div>
       </section>
 

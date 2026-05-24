@@ -5,6 +5,13 @@
   align-items: stretch;
 }
 
+.contact-info.card,
+.contact-form.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .contact-details {
   display: grid;
   gap: 1.25rem;
@@ -73,51 +80,67 @@
   font-weight: 500;
 }
 
-.contact-social {
-  margin-top: 1.5rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--border);
+/* Premium Quick-Action Phone/WhatsApp Buttons next to Official No */
+.contact-phone-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-.contact-social h3 {
-  font-size: 0.95rem;
-  margin-bottom: 0.65rem;
+.contact-phone-link {
   color: var(--navy);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: color var(--transition);
 }
 
-.contact-social__note {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-top: 0.75rem;
+.contact-phone-link:hover {
+  color: var(--gold-dark);
 }
 
-.contact-qr {
-  margin-top: 1.5rem;
-  text-align: center;
+.contact-phone-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.contact-qr__image {
-  max-width: 160px;
-  width: 100%;
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow);
+.contact-action-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white) !important;
+  box-shadow: 0 4px 10px rgba(15, 76, 129, 0.1);
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease, filter 0.2s ease;
 }
 
-.contact-qr__caption {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-top: 0.5rem;
+.contact-action-btn svg {
+  width: 16px;
+  height: 16px;
 }
 
-.contact-qr--placeholder::before {
-  content: 'QR code image — add /public/images/contact-qr.png';
-  display: block;
-  padding: 2rem 1rem;
-  background: var(--off-white);
-  border: 1px dashed var(--border);
-  border-radius: var(--radius-sm);
-  font-size: 0.82rem;
-  color: var(--text-muted);
+.contact-action-btn--phone {
+  background: var(--blue);
+}
+
+.contact-action-btn--phone:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.35);
+  filter: brightness(1.1);
+}
+
+.contact-action-btn--whatsapp {
+  background: #25D366;
+}
+
+.contact-action-btn--whatsapp:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(37, 211, 102, 0.35);
+  filter: brightness(1.1);
 }
 
 @media (max-width: 768px) {
@@ -196,20 +219,64 @@
   border: 1px solid rgba(15, 76, 129, 0.16);
   background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 10px 24px rgba(15, 76, 129, 0.08);
-  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease, background 0.28s ease;
+  transition: color 0.3s ease, transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease, background 0.28s ease;
 }
 
-.contact-social-section__icons a:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 18px 35px rgba(15, 76, 129, 0.16);
-  border-color: rgba(15, 76, 129, 0.28);
-  background: rgba(15, 76, 129, 0.12);
+.contact-social-section__icons a.social-icon {
+  color: var(--navy);
+}
+
+.contact-social-section__icons a.social-icon:hover {
+  transform: translateY(-5px) scale(1.08);
+}
+
+.contact-social-section__icons a.social-icon--instagram:hover {
+  color: #E4405F;
+  border-color: rgba(228, 64, 95, 0.3);
+  background: rgba(228, 64, 95, 0.08);
+  box-shadow: 0 12px 30px rgba(228, 64, 95, 0.2);
+}
+
+.contact-social-section__icons a.social-icon--facebook:hover {
+  color: #1877F2;
+  border-color: rgba(24, 119, 242, 0.3);
+  background: rgba(24, 119, 242, 0.08);
+  box-shadow: 0 12px 30px rgba(24, 119, 242, 0.2);
+}
+
+.contact-social-section__icons a.social-icon--twitter:hover {
+  color: #000000;
+  border-color: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.contact-social-section__icons a.social-icon--linkedin:hover {
+  color: #0A66C2;
+  border-color: rgba(10, 102, 194, 0.3);
+  background: rgba(10, 102, 194, 0.08);
+  box-shadow: 0 12px 30px rgba(10, 102, 194, 0.2);
+}
+
+.contact-social-section__icons a.social-icon--whatsapp:hover {
+  color: #25D366;
+  border-color: rgba(37, 211, 102, 0.3);
+  background: rgba(37, 211, 102, 0.08);
+  box-shadow: 0 12px 30px rgba(37, 211, 102, 0.2);
+}
+
+.contact-social-section__icons a.social-icon--telegram:hover {
+  color: #0088cc;
+  border-color: rgba(0, 136, 204, 0.3);
+  background: rgba(0, 136, 204, 0.08);
+  box-shadow: 0 12px 30px rgba(0, 136, 204, 0.2);
 }
 
 .contact-social-section__icons a svg {
   width: 24px;
   height: 24px;
-  color: var(--navy);
+  color: currentColor;
+  transition: color 0.3s ease;
 }
 
 @media (max-width: 650px) {
@@ -296,7 +363,19 @@
   color: var(--gold-dark);
 }
 
-/* Premium WhatsApp QR hover link styles */
+/* Premium WhatsApp QR container & hover link styles */
+.contact-qr {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.contact-qr__caption {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
 .contact-qr__link {
   display: inline-block;
   position: relative;

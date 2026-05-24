@@ -3,8 +3,6 @@ import { motion } from 'framer-motion';
 import {
   institute,
   coreServices,
-  vision,
-  missionPoints,
   homeWelcome,
   testimonialIntro,
 } from '../data/siteData';
@@ -39,8 +37,7 @@ export default function Home() {
             <h1>{institute.name}</h1>
             <p className="hero__tagline">{institute.tagline}</p>
             <p className="hero__intro">
-              Empowering students, researchers, and institutions with multidisciplinary
-              research, training, and accreditation support.
+              Your Premier Partner for Multidisciplinary Research and Institutional Excellence. Providing End-To-End Guidance for Scholars, Researchers, Educators, and Universities. Bridging Academia with Industry.
             </p>
             <div className="hero__actions">
               <Link to="/about" className="btn btn--primary">
@@ -98,7 +95,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="introduction" className="section section--alt">
+      <section id="introduction" className="section">
         <div className="container">
           <Reveal className="section__header">
             <span className="section__label">Introduction</span>
@@ -110,47 +107,23 @@ export default function Home() {
                 <p>{homeWelcome}</p>
               </div>
               <div className="introduction-media">
-                <div className="introduction-media__placeholder">
-                  Introduction image
-                </div>
+                <img
+                  src="/images/home_introduction.png"
+                  alt="Scholars and researchers in a modern collaborative academic workspace"
+                  className="introduction-media__image"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
             </div>
           </Reveal>
         </div>
       </section>
 
-      <section id="vision-mission" className="section">
-        <div className="container">
-          <Reveal className="section__header">
-            <span className="section__label">Purpose</span>
-            <h2>Vision & Mission</h2>
-          </Reveal>
-          <div className="vision-mission-grid">
-            <article className="intro-card intro-card--with-media intro-card--vision">
-              <div className="intro-card__content">
-                <h3>Vision</h3>
-                <p>{vision}</p>
-              </div>
-              <div className="intro-card__media">
-                <div className="intro-card__placeholder">Vision image</div>
-              </div>
-            </article>
-            <article className="intro-card intro-card--gold intro-card--with-media intro-card--mission">
-              <div className="intro-card__media">
-                <div className="intro-card__placeholder">Mission image</div>
-              </div>
-              <div className="intro-card__content">
-                <h3>Mission</h3>
-                <ul className="mission-list">
-                  {missionPoints.map((point) => (
-                    <li key={point}>{point}</li>
-                  ))}
-                </ul>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
+      <div id="upcoming-events">
+        <EventsTicker />
+      </div>
+
 
       <AchievementsStats />
 
@@ -176,9 +149,6 @@ export default function Home() {
           </StaggerGrid>
         </div>
       </section>
-      <div id="upcoming-events">
-        <EventsTicker />
-      </div>
 
       <div id="testimonials">
         <TestimonialMarquee subtitle={testimonialIntro} />

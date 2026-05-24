@@ -28,6 +28,7 @@ export default function Certifications() {
   const [localError, setLocalError] = useState('');
   const [settingsMsg, setSettingsMsg] = useState('');
   const [savingTitle, setSavingTitle] = useState(false);
+  const [adding, setAdding] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCertifications());
@@ -55,17 +56,22 @@ export default function Certifications() {
   async function handleAdd(e) {
     e.preventDefault();
     setLocalError('');
-    const result = await dispatch(addCertification({
-      title: title.trim(),
-      drive_link: driveLink.trim() || null,
-    }));
-    
-    if (result.error) {
-      setLocalError(result.payload || 'Failed to add certification');
-      return;
+    setAdding(true);
+    try {
+      const result = await dispatch(addCertification({
+        title: title.trim(),
+        drive_link: driveLink.trim() || null,
+      }));
+      
+      if (result.error) {
+        setLocalError(result.payload || 'Failed to add certification');
+        return;
+      }
+      setTitle('');
+      setDriveLink('');
+    } finally {
+      setAdding(false);
     }
-    setTitle('');
-    setDriveLink('');
   }
 
   function handleDelete(id) {
@@ -123,8 +129,8 @@ export default function Certifications() {
               placeholder="https://drive.google.com/..."
             />
           </label>
-          <button type="submit" className="btn btn--primary">
-            Add
+          <button type="submit" className="btn btn--primary" disabled={adding}>
+            {adding ? 'Adding…' : 'Add'}
           </button>
         </form>
         {(error || localError) && <p className="admin-error">{error || localError}</p>}
