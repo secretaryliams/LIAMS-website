@@ -41,8 +41,12 @@
   border-bottom: 1px solid rgba(30, 58, 95, 0.15);
 }
 
-.stats-card:nth-child(even) .stats-card__header {
-  background: rgba(197, 160, 89, 0.05);
+.stats-card--collab .stats-card__header {
+  /* removed custom background to match other cards */
+}
+
+.stats-card--collab .stats-card__header h3 {
+  color: var(--gold-dark);
 }
 
 .stats-card__header h3 {
@@ -63,10 +67,6 @@
   font-variant-numeric: tabular-nums;
   margin-top: 0.25rem;
   line-height: 1.2;
-}
-
-.stats-card:nth-child(even) .stats-card__total {
-  color: var(--navy);
 }
 
 .stats-card__subgrid {
@@ -178,7 +178,7 @@
 
 /* Collab Specific styles */
 .stats-card--collab {
-  justify-content: flex-start;
+  /* justify-content: flex-start removed to match other cards */
 }
 
 .stats-card__collab-desc {
