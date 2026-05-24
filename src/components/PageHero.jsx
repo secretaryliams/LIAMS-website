@@ -1,9 +1,11 @@
 import { motion } from 'framer-motion';
+import NeuralBackground from './NeuralBackground';
 import './PageHero.css';
 
 export default function PageHero({ title, subtitle, label }) {
   return (
     <section className="page-hero">
+      <NeuralBackground variant="mini" />
       <motion.div
         className="container page-hero__inner"
         initial={{ opacity: 0, y: 20 }}

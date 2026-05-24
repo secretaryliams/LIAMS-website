@@ -24,7 +24,14 @@ const PORT = process.env.PORT || 5000;
 // Verify Supabase keys
 const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
 const supabaseServiceRole = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+const clientUrl = process.env.CLIENT_URL;
+if (!clientUrl) {
+  console.error(
+    'CRITICAL: CLIENT_URL environment variable is NOT set.\n' +
+    'Reset-password emails will contain a broken redirect URL.\n' +
+    'Add CLIENT_URL=https://your-vercel-app.vercel.app to Vercel Environment Variables.'
+  );
+}
 
 if (!supabaseUrl) {
   console.error('CRITICAL: VITE_SUPABASE_URL / SUPABASE_URL is missing in environment variables.');
@@ -143,6 +150,13 @@ app.post('/api/auth/forgot-password', forgotPasswordLimiter, async (req, res) =>
     message: 'If your email is registered in our admin database, you will receive a password reset link shortly.'
   };
 
+  // Guard: refuse to send email if CLIENT_URL is not configured (would generate broken link)
+  if (!clientUrl) {
+    console.error(`[forgot-password] Aborting: CLIENT_URL is not set. Cannot build a valid redirectTo for ${email}.`);
+    // Return generic success to avoid user enumeration, but log the real problem
+    return res.status(200).json(genericResponse);
+  }
+
   try {
     // 1. Query public.admin_users to check admin existence and role
     const { data: admin, error: dbError } = await supabase
@@ -159,32 +173,34 @@ app.post('/api/auth/forgot-password', forgotPasswordLimiter, async (req, res) =>
     // 2. If user exists and is active admin
     if (admin && admin.is_active) {
       const redirectUrl = `${clientUrl}/admin/reset-password`;
-      
+      console.log(`[forgot-password] Sending reset email to ${email} with redirectTo: ${redirectUrl}`);
+
       // Trigger Supabase Auth Reset Link
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: redirectUrl
       });
 
       if (resetError) {
-        console.error('Supabase reset password request failed:', resetError.message);
+        console.error('[forgot-password] Supabase reset password request failed:', resetError.message);
         return res.status(200).json(genericResponse);
       }
 
       // Write to audit log
       await logAuditEvent(admin.auth_user_id, `password_reset_requested_email: ${email}`, req);
-      console.log(`Success: Forgot Password email triggered for active admin: ${email}`);
+      console.log(`[forgot-password] Success: reset email triggered for active admin: ${email}`);
     } else {
       // Prevent user enumeration: log skipped email
       await logAuditEvent(null, `unregistered_or_inactive_forgot_password_attempt: ${email}`, req);
-      console.log(`Enumeration Shield: Skipping forgot password trigger for non-admin email: ${email}`);
+      console.log(`[forgot-password] Enumeration Shield: skipping trigger for non-admin: ${email}`);
     }
 
     return res.status(200).json(genericResponse);
   } catch (err) {
-    console.error('System error in forgot-password handler:', err);
+    console.error('[forgot-password] System error:', err);
     return res.status(200).json(genericResponse);
   }
 });
+
 
 // Endpoint B: Lockout Check (Pre-Auth Hook)
 app.post('/api/auth/check-lockout', lockoutCheckLimiter, async (req, res) => {

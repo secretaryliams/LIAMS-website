@@ -391,7 +391,7 @@ export const objectivesIntro =
 export const objectivesSections = [
   {
     title: '1. Academic Knowledge Dissemination & Skill Building',
-    image: '/images/obj_academic.png',
+    image: '/images/obj_academic.jpg',
     items: [
       {
         label: 'Global Academic Events',
