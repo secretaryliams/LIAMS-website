@@ -1,22 +1,47 @@
 export const institute = {
   name: 'Loyola Institute of Advanced Multidisciplinary Studies',
   shortName: 'LIAMS',
-  tagline: 'Empowering Multidisciplinary Research and Innovation & Academic Excellence.',
+  tagline: 'Your Premier Partner for Multidisciplinary Research and Institutional Excellence. Providing End-To-End Guidance for Scholars, Researchers, Educators, and Universities. Bridging Academia with Industry.',
   contact: {
-    email: 'info@liams.edu.in',
-    phone: '+91 44 0000 0000',
-    address: 'Loyola College Campus, Nungambakkam, Chennai – 600034, Tamil Nadu, India',
+    phone: '+91 6374599661',
+    emails: [
+      'director@liams.in',
+      'admin@liams.in',
+      'director.liams@gmail.com'
+    ],
+    offices: [
+      {
+        id: 'head-office',
+        name: 'Head Office (Kerala)',
+        address: '9/18, West Chakingal Street, Thrissur – 680588, Kerala, India.'
+      },
+      {
+        id: 'chennai-office',
+        name: 'Chennai Office',
+        address: '16, Gollam Thottam, Perambur, Chennai, Tamil Nadu – 600011, India.'
+      },
+      {
+        id: 'tirunelveli-office',
+        name: 'Tirunelveli Office',
+        address: '59/1, 5th Thomas Street, Perumalpuram, Tirunelveli – 627007, India.'
+      },
+      {
+        id: 'uae-office',
+        name: 'United Arab Emirates Office',
+        address: 'LIAMS, One JLT, Floor 12, Jumeirah Lakes Towers, Dubai, United Arab Emirates.'
+      }
+    ],
     hours: 'Monday – Friday, 9:00 AM – 5:00 PM',
   },
 };
 
 export const socialLinks = [
-  { name: 'Facebook', id: 'facebook', href: '#' },
-  { name: 'Instagram', id: 'instagram', href: '#' },
-  { name: 'LinkedIn', id: 'linkedin', href: '#' },
-  { name: 'WhatsApp', id: 'whatsapp', href: '#' },
-  { name: 'Telegram', id: 'telegram', href: '#' },
-  { name: 'Twitter', id: 'twitter', href: '#' },
+  { name: 'Facebook', id: 'facebook', href: 'https://www.facebook.com/share/g/1Cjd3Hy6gN/' },
+  { name: 'Instagram', id: 'instagram', href: 'https://www.instagram.com/liams_director/' },
+  { name: 'LinkedIn', id: 'linkedin', href: 'https://www.linkedin.com/company/117724272/' },
+  { name: 'WhatsApp', id: 'whatsapp', href: 'https://chat.whatsapp.com/JPJLFGYq3702JjrymOVejI' },
+  { name: 'Telegram', id: 'telegram', href: 'https://t.me/+AZ6pBz5vY0k4NDg1' },
+  { name: 'Twitter', id: 'twitter', href: 'https://x.com/directorliams' },
 ];
 
 export const navLinks = [
@@ -163,131 +188,191 @@ export const coreServices = [
 
 export const testimonials = [
   {
-    quote:
-      'LIAMS has been an invaluable partner in strengthening our faculty research output and publication pipeline.',
-    author: 'Dr. R. Venkatesh',
-    role: 'Dean, Engineering Sciences',
-    org: 'Partner Institution',
+    quote: "LIAMS provided valuable guidance throughout my research journey by supporting paper publication, conference presentations, and journal publications, contributing greatly to my academic advancement.",
+    author: "Dr. S. Harikishan",
+    role: "Ph.D.",
+    org: "ETH Zurich – Zurich, Switzerland"
   },
   {
-    quote:
-      'Their industry-oriented internship model helped our students bridge classroom learning with real-world innovation.',
-    author: 'Prof. Anitha Krishnan',
-    role: 'Head, Industry Relations',
-    org: 'Collaborating University',
+    quote: "My association with LIAMS has strengthened my research capabilities through continuous guidance in publishing research papers, and presenting quality conference and journal publications.",
+    author: "Dr. S. Rathikeyan",
+    role: "Ph.D.",
+    org: "National University of Singapore – Singapore"
   },
   {
-    quote:
-      'Professional, structured, and academically rigorous — LIAMS delivers excellence across multidisciplinary domains.',
-    author: 'Dr. James Mathew',
-    role: 'Research Director',
-    org: 'International Partner',
+    quote: "LIAMS has played an important role in enhancing my academic profile through expert guidance in conference publications, journal submissions, and research dissemination.",
+    author: "Dr. S. Lakina",
+    role: "Ph.D.",
+    org: "University of Auckland – Auckland, New Zealand"
   },
   {
-    quote:
-      'The PhD support programme at LIAMS transformed our scholars\' thesis quality and submission readiness.',
-    author: 'Dr. Priya Sundaram',
-    role: 'Director of Research',
-    org: 'Affiliated College',
+    quote: "The structured support and guidance offered by LIAMS enabled successful paper publications and encouraged active participation in academic conferences.",
+    author: "Mr. C. Poelski",
+    role: "M.S., Research Chemistry",
+    org: "Technical University of Munich – Munich, Germany"
   },
   {
-    quote:
-      'Outstanding FDP sessions — our faculty gained practical skills in emerging pedagogy and assessment design.',
-    author: 'Prof. Michael D\'Souza',
-    role: 'Dean of Academics',
-    org: 'Engineering College',
+    quote: "LIAMS has been instrumental in my academic growth by providing research guidance and opportunities for publishing quality papers in Sci and Scopus indexed journals and Book chapters.",
+    author: "Dr. Y. Ajmalthi",
+    role: "Ph.D.",
+    org: "University of Szczecin – Szczecin, Poland"
   },
   {
-    quote:
-      'LIAMS conference proceedings meet international standards. A trusted organiser for academic symposia.',
-    author: 'Dr. Lakshmi Narayanan',
-    role: 'Conference Chair',
-    org: 'National University',
+    quote: "With the continuous mentorship of LIAMS, I improved my research writing skills and gained valuable exposure through publications, FDPs, and Training program.",
+    author: "Mr. V. Koyalskin Stone",
+    role: "M.S., Research Chemistry",
+    org: "Massey University – Palmerston North, New Zealand"
   },
   {
-    quote:
-      'Publication and indexing assistance from LIAMS accelerated our department\'s research visibility globally.',
-    author: 'Dr. Arun Chakraborty',
-    role: 'Head, Department of Science',
-    org: 'State University',
+    quote: "LIAMS supported my early research development through proper guidance in academic writing, publication processes, and participation in faculty and conference development activities.",
+    author: "Ms. Rakorasree",
+    role: "Science Graduate",
+    org: "University of Debrecen – Debrecen, Hungary"
   },
   {
-    quote:
-      'Collaborative MoU with LIAMS opened doors for joint workshops and student exchange we had long envisioned.',
-    author: 'Prof. Helen Thomas',
-    role: 'International Relations',
-    org: 'Overseas Partner',
+    quote: "Through dedicated research guidance and publication support, LIAMS helped strengthen my academic contributions across journals, conferences, and professional development programs.",
+    author: "Dr. R. Ourilkaure",
+    role: "Ph.D.",
+    org: "National Pingtung University of Science and Technology – Pingtung, Taiwan"
   },
   {
-    quote:
-      'Accreditation support was meticulous — documentation, benchmarks, and advisory at every stage.',
-    author: 'Dr. Suresh Babu',
-    role: 'IQAC Coordinator',
-    org: 'Autonomous Institution',
+    quote: "LIAMS has provided excellent academic guidance that facilitated quality research publication and encouraged meaningful engagement in FDPs and Training programs.",
+    author: "Dr. F. Fre Doolpa",
+    role: "Science Researcher",
+    org: "University of Northern British Columbia – Prince George, British Columbia, Canada"
   },
   {
-    quote:
-      'The research innovation lab provides the mentorship and infrastructure our projects desperately needed.',
-    author: 'Dr. Meera Iyer',
-    role: 'Principal Investigator',
-    org: 'R&D Centre',
+    quote: "LIAMS contributed significantly to my research journey by offering guidance for journal publications, conference papers, and continuous professional development initiatives.",
+    author: "Dr. C. Chevokshanier",
+    role: "Ph.D.",
+    org: "University of Southern Queensland – Toowoomba, Queensland, Australia"
   },
   {
-    quote:
-      'Students who completed LIAMS internships consistently outperform peers in industry placements.',
-    author: 'Mr. Karthik Rajan',
-    role: 'HR Director',
-    org: 'Technology Firm',
+    quote: "Outstanding FDP sessions — our faculty gained practical skills in emerging pedagogy and assessment design.",
+    author: "Dr. S. Harikrishnan",
+    role: "Associate Professor",
+    org: "TDMNS College, India"
   },
   {
-    quote:
-      'IPR consulting helped us file our first patent — clear guidance from concept to documentation.',
-    author: 'Dr. Fatima Hassan',
-    role: 'Innovation Lead',
-    org: 'Startup Incubator',
+    quote: "We recommend LIAMS to any institution seeking quality, ISO-aligned academic and research services.",
+    author: "Mr. G. Karthikeyan",
+    role: "HOD PG & Research Chemistry",
+    org: "TDMNS College, India"
   },
   {
-    quote:
-      'Workshops on Generative AI and IoT were cutting-edge, well-structured, and immediately applicable.',
-    author: 'Prof. David Chen',
-    role: 'Head, Computer Science',
-    org: 'Technical Institute',
+    quote: "LIAMS embodies the Loyola tradition of excellence while embracing modern multidisciplinary education.",
+    author: "Dr. J. Sakina",
+    role: "Associate Professor, PG & Research Chemistry",
+    org: "Sarah Tucker College, India"
   },
   {
-    quote:
-      'LIAMS embodies the Loyola tradition of excellence while embracing modern multidisciplinary education.',
-    author: 'Fr. Administrator',
-    role: 'Academic Council',
-    org: 'Loyola Network',
+    quote: "IPR consulting helped us file our first patent — clear guidance from concept to documentation.",
+    author: "Dr. C. Joel",
+    role: "Assistant Professor, PG & Research Chemistry",
+    org: "St. John’s College, India"
   },
   {
-    quote:
-      'Knowledge-sharing initiatives created meaningful bridges between our institution and industry partners.',
-    author: 'Dr. Nandini Rao',
-    role: 'Director, Partnerships',
-    org: 'Business School',
+    quote: "From proposal to viva, end-to-end PhD support was professional, timely, and deeply encouraging.",
+    author: "Dr. R. Amalthi",
+    role: "AP / Chemistry",
+    org: "Chevalier T. Thomas Elizabeth College for Women, India"
   },
   {
-    quote:
-      'From proposal to viva, end-to-end PhD support was professional, timely, and deeply encouraging.',
-    author: 'Scholar Representative',
-    role: 'Doctoral Researcher',
-    org: 'LIAMS Programme',
+    quote: "LIAMS industry-oriented internship model helped our students bridge classroom learning with real-world innovation.",
+    author: "Mr. V. GLASSTON",
+    role: "PG & Research Chemistry",
+    org: "TDMNS College, India"
   },
   {
-    quote:
-      'Short-term training programmes are industry-relevant and delivered by practitioners who know the field.',
-    author: 'Dr. George Kutty',
-    role: 'Training Coordinator',
-    org: 'Polytechnic College',
+    quote: "Short-term training programmes are industry-relevant and delivered by practitioners who know the field.",
+    author: "Ms. R. Jeyasree",
+    role: "Trainee",
+    org: "KKNPP, Kudankulam"
   },
   {
-    quote:
-      'We recommend LIAMS to any institution seeking quality, ISO-aligned academic and research services.',
-    author: 'Dr. Aparna Menon',
-    role: 'Vice Chancellor',
-    org: 'Partner University',
+    quote: "Publication and indexing assistance from LIAMS accelerated our department's research visibility globally.",
+    author: "Dr. R. Surekha",
+    role: "Deputy Dean",
+    org: "Agurchand Manmull Jain College, India"
   },
+  {
+    quote: "Collaborative MoU with LIAMS opened doors for joint workshops and student exchange we had long envisioned.",
+    author: "Dr. R. Deepa",
+    role: "Research Supervisor in Maths",
+    org: "M.S University, India"
+  },
+  {
+    quote: "The PhD support programme at LIAMS transformed our scholars' thesis quality and submission readiness.",
+    author: "Dr. C. THAMARAI CHELVI",
+    role: "PG & Research Department of Chemistry",
+    org: "The Standard Fireworks Rajaratnam College for Women, India"
+  },
+  {
+    quote: "The workshop was well-structured, interactive, and beneficial for enhancing technical skills. The resource persons explained the concepts clearly with real-time examples and demonstrations.",
+    author: "Dr. A. Vivek Anand",
+    role: "Assistant Professor",
+    org: "Matrusri Engineering College, India"
+  },
+  {
+    quote: "Loyola Institute of Advanced Multi-Disciplinary Studies has provided excellent support and guidance for publishing research papers in Scopus and SCI indexed journals. As a faculty member, the support received was very useful for academic growth and career promotion requirements.",
+    author: "Dr. Ebenezer",
+    role: "Assistant Professor",
+    org: "MLR Institute of Technology, India"
+  },
+  {
+    quote: "As a faculty member, the assistance received from the LIAMS was highly beneficial for strengthening my academic profile and career advancement. The team demonstrated professionalism, commitment, and continuous support throughout the publication process. Their expert guidance in manuscript preparation and journal selection ensured a smooth and successful publication experience.",
+    author: "Dr. Venkateswarlu Naik",
+    role: "Assistant Professor",
+    org: "Narsimha Reddy Engineering College, India"
+  },
+  {
+    quote: "As a faculty member, my experience with the LIAMS has been exceptional. The institute provides comprehensive, end-to-end research support, guiding scholars seamlessly from foundational concepts to advanced methodologies. Thanks to their structured mentorship and academic resources, I successfully navigated the entire research lifecycle.",
+    author: "Mr. K. Srinivasa Rao",
+    role: "RK College of Engineering",
+    org: "India"
+  },
+  {
+    quote: "As a Research Scholar at the LIAMS, I am immensely grateful for the institution's unwavering support. Their exceptional guidance and robust academic resources played a pivotal role in the successful completion of my research work. I highly recommend LIAMS to any researcher seeking a dedicated and empowering environment.",
+    author: "Dr. B. Ravi Prasad",
+    role: "Research Scholar",
+    org: "AAR Mahaveer Engineering College, India"
+  },
+  {
+    quote: "LIAMS provided invaluable support throughout our patent filing process. Their team of experts seamlessly navigated the complex legal and technical requirements, turning a daunting task into a structured, manageable experience.",
+    author: "A. Arun Kumar",
+    role: "Innovator",
+    org: "MLR Institute of Technology, India"
+  },
+  {
+    quote: "Securing a patent can be an overwhelming journey, but LIAMS made it seamless. From initial disclosures to the final submission, their team offered exceptional technical insights and legal expertise. They took the time to meticulously refine our claims, ensuring robust protection for our intellectual property.",
+    author: "M. Kishore",
+    role: "Patent Applicant",
+    org: "Aditya Engineering College, India"
+  },
+  {
+    quote: "Attended an internship at LIAMS. It provided excellent practical exposure and enhanced my technical knowledge and skills. The trainers and mentors were very supportive and explained the concepts clearly with hands-on sessions.",
+    author: "Harika Rani",
+    role: "UG Scholar",
+    org: "Maria College of Engineering, India"
+  },
+  {
+    quote: "The internship from LIAMS provided excellent hands-on exposure and helped me bridge the gap between classroom learning and real-world applications. The structured sessions and practical assignments boosted my confidence and industry readiness.",
+    author: "Anusha Reddy",
+    role: "UG Scholar",
+    org: "Mahindra University, India"
+  },
+  {
+    quote: "Workshops on Generative AI and IoT were cutting-edge, well-structured, and immediately applicable.",
+    author: "Mr. Rajan",
+    role: "PG Scholar",
+    org: "MIT Chennai, India"
+  },
+  {
+    quote: "LIAMS provided exceptional, structured guidance throughout our institutional accreditation process. Their expert team demystified complex regulatory requirements, turning a daunting task into a manageable, strategic roadmap. Thanks to their meticulous documentation reviews and insightful mock audits, our staff felt entirely prepared and confident.",
+    author: "Mrs. Angel Sarojini",
+    role: "Academic Director",
+    org: "Xavier Institute for Research and Development, India"
+  }
 ];
 
 export const vision =
@@ -362,7 +447,7 @@ export const ourStory =
 export const leadershipParagraph =
   'Our foundational strength lies in our multidisciplinary leadership. The institute is driven by academicians and industry experts with deep technical backgrounds spanning Information and Communication Engineering, Electrical Engineering, Mechanical Engineering, Chemical Engineering, Basic Sciences and Mathematics. This diverse expertise enables us to foster true cross-disciplinary innovation, drawing on profound expertise in cutting-edge domains.';
 
-export const directorPhoto = '/images/director.jpg';
+export const directorPhoto = '/images/director.png';
 
 export const advisoryBoard = [
   { name: 'Dr. M. Balaji, M.E., Ph.D.', designation: 'Professor, SSN College of Engineering, Chennai', field: 'Academic Research Leadership' },

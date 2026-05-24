@@ -8,6 +8,9 @@ import './Contact.css';
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
   const { contact } = institute;
+  const [activeOfficeId, setActiveOfficeId] = useState(contact.offices[0].id);
+
+  const activeOffice = contact.offices.find((o) => o.id === activeOfficeId) || contact.offices[0];
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,21 +31,41 @@ export default function Contact() {
             <div id="get-in-touch" />
             <h2>Get in Touch</h2>
             <p>Reach out for partnerships, training, research support, or general enquiries.</p>
+
+            <div className="office-selector">
+              {contact.offices.map((office) => (
+                <button
+                  key={office.id}
+                  type="button"
+                  className={`office-tab ${activeOfficeId === office.id ? 'office-tab--active' : ''}`}
+                  onClick={() => setActiveOfficeId(office.id)}
+                >
+                  {office.name.replace(' Office', '').replace(' (Kerala)', '')}
+                </button>
+              ))}
+            </div>
+
             <dl className="contact-details">
               <div>
-                <dt>Address</dt>
-                <dd>{contact.address}</dd>
+                <dt>Address ({activeOffice.name})</dt>
+                <dd className="office-address">{activeOffice.address}</dd>
               </div>
               <div>
-                <dt>Email</dt>
+                <dt>Official Emails</dt>
                 <dd>
-                  <a href={`mailto:${contact.email}`}>{contact.email}</a>
+                  <ul className="contact-emails-list">
+                    {contact.emails.map((email) => (
+                      <li key={email}>
+                        <a href={`mailto:${email}`}>{email}</a>
+                      </li>
+                    ))}
+                  </ul>
                 </dd>
               </div>
               <div>
-                <dt>Phone</dt>
+                <dt>Official No</dt>
                 <dd>
-                  <a href={`tel:${contact.phone.replace(/\s/g, '')}`}>{contact.phone}</a>
+                  <a href={`tel:${contact.phone.replace(/[^+\d]/g, '')}`}>{contact.phone}</a>
                 </dd>
               </div>
               <div>
@@ -59,16 +82,26 @@ export default function Contact() {
               </p>
             </div>
             <div className="contact-qr">
-              <img
-                src="/images/contact-qr.png"
-                alt="QR code to contact LIAMS"
-                className="contact-qr__image"
-                onError={(e) => {
-                  e.currentTarget.closest('.contact-qr').classList.add('contact-qr--placeholder');
-                  e.currentTarget.style.display = 'none';
-                }}
-              />
-              <p className="contact-qr__caption">Scan to connect with LIAMS</p>
+              <a
+                href="https://chat.whatsapp.com/JPJLFGYq3702JjrymOVejI"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="contact-qr__link"
+              >
+                <img
+                  src="/images/contact-qr.png"
+                  alt="WhatsApp QR Code to Join LIAMS Community"
+                  className="contact-qr__image"
+                  onError={(e) => {
+                    e.currentTarget.closest('.contact-qr').classList.add('contact-qr--placeholder');
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+                <div className="contact-qr__overlay">
+                  <span>Join WhatsApp Community</span>
+                </div>
+              </a>
+              <p className="contact-qr__caption">Scan or tap to connect with LIAMS on WhatsApp</p>
             </div>
           </Reveal>
 
@@ -115,6 +148,25 @@ export default function Contact() {
                   <button type="submit" className="btn btn--primary">
                     Send Message
                   </button>
+                  <div className="contact-form__footer">
+                    <div className="assurance-badges">
+                      <div className="assurance-badge">
+                        <span className="assurance-badge__icon">🔒</span>
+                        <span>Secure Data</span>
+                      </div>
+                      <div className="assurance-badge">
+                        <span className="assurance-badge__icon">⏱️</span>
+                        <span>Response &lt; 24h</span>
+                      </div>
+                      <div className="assurance-badge">
+                        <span className="assurance-badge__icon">🎓</span>
+                        <span>Expert Support</span>
+                      </div>
+                    </div>
+                    <p className="contact-form__privacy-note">
+                      We treat your details with strict confidentiality. By submitting, you agree to our academic privacy standards.
+                    </p>
+                  </div>
                 </>
               )}
             </form>

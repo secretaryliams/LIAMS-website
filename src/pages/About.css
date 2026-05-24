@@ -142,6 +142,28 @@
   gap: 1.25rem;
 }
 
+/* Core Objectives Section Padding Tweaks */
+#core-objectives {
+  padding-bottom: 0.5rem;
+}
+
+[id^="core-objective-"] {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+#core-objective-1 {
+  padding-top: 0;
+}
+
+#core-objective-1 .split-section__media {
+  padding-top: 2rem;
+}
+
+#core-objective-3 {
+  padding-bottom: 3.5rem;
+}
+
 .objectives-block {
   display: grid;
   gap: 1.5rem;

@@ -5,7 +5,7 @@ import { authService } from "../../services/authService";
 import "./Admin.css";
 
 export default function ForgotPassword() {
-  const { resetPassword, isConfigured } = useAuth();
+  const { isConfigured } = useAuth();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);

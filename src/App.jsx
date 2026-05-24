@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import ProtectedAdminRoute from './routes/ProtectedAdminRoute';
 import Loader from './components/common/Loader';
@@ -21,7 +21,7 @@ const Contact = lazy(() => import('./pages/Contact'));
 const Login = lazy(() => import('./pages/admin/Login'));
 const ForgotPassword = lazy(() => import('./pages/admin/ForgotPassword'));
 const ResetPassword = lazy(() => import('./pages/admin/ResetPassword'));
-const InviteAdmin = lazy(() => import('./pages/admin/InviteAdmin'));
+
 const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'));
 const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
 const Announcements = lazy(() => import('./pages/admin/Announcements'));
@@ -52,7 +52,7 @@ export default function App() {
         <Route path="/admin" element={<ProtectedAdminRoute />}>
           <Route element={<Suspense fallback={<Loader />}><AdminLayout /></Suspense>}>
             <Route index element={<Suspense fallback={<Loader />}><Dashboard /></Suspense>} />
-            <Route path="invite" element={<Suspense fallback={<Loader />}><InviteAdmin /></Suspense>} />
+            <Route path="invite" element={<Navigate to="/admin" replace />} />
             <Route path="announcements" element={<Suspense fallback={<Loader />}><Announcements /></Suspense>} />
             <Route path="upcoming-events" element={<Suspense fallback={<Loader />}><UpcomingEvents /></Suspense>} />
             <Route path="previous-events" element={<Suspense fallback={<Loader />}><PreviousEvents /></Suspense>} />
