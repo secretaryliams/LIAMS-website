@@ -12,12 +12,15 @@ import TestimonialMarquee from '../components/TestimonialMarquee';
 import Reveal from '../components/motion/Reveal';
 import StaggerGrid from '../components/motion/StaggerGrid';
 import AchievementsStats from '../components/AchievementsStats';
+import NeuralBackground from '../components/NeuralBackground';
 import './Home.css';
 
 export default function Home() {
   return (
     <>
       <section className="hero">
+        {/* Neural network canvas animation */}
+        <NeuralBackground variant="full" />
         {/* Animated background elements */}
         <div className="hero__background">
           <div className="hero-shape hero-shape--1"></div>
