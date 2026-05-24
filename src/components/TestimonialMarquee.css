@@ -24,11 +24,11 @@
   display: flex;
   gap: 1.25rem;
   width: max-content;
-  animation: marquee-left 55s linear infinite;
+  animation: marquee-left 95s linear infinite;
 }
 
 .marquee-row--reverse .marquee-row__track {
-  animation: marquee-right 55s linear infinite;
+  animation: marquee-right 95s linear infinite;
 }
 
 .marquee-row:hover .marquee-row__track {

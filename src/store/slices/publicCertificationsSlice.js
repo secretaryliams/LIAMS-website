@@ -15,13 +15,28 @@ export const fetchPublicCertifications = createAsyncThunk(
   'publicCertifications/fetchPublicCertifications',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get('/certifications', {
-        params: {
-          select: '*',
-          order: 'created_at.desc',
-        },
-      });
-      return response.data.map(mapCertification);
+      const [certResponse, settingsResponse] = await Promise.all([
+        api.get('/certifications', {
+          params: {
+            select: '*',
+            order: 'created_at.desc',
+          },
+        }),
+        api.get('/site_settings', {
+          params: {
+            select: 'value',
+            key: 'eq.certifications_section_title',
+          },
+        }),
+      ]);
+
+      const items = (certResponse.data || []).map(mapCertification);
+      let sectionTitle = 'Certifications';
+      if (settingsResponse.data && settingsResponse.data.length > 0) {
+        sectionTitle = settingsResponse.data[0].value?.trim() || 'Certifications';
+      }
+
+      return { items, sectionTitle };
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -30,6 +45,7 @@ export const fetchPublicCertifications = createAsyncThunk(
 
 const initialState = {
   items: [],
+  sectionTitle: 'Certifications',
   loading: false,
   error: null,
 };
@@ -46,7 +62,8 @@ const publicCertificationsSlice = createSlice({
       })
       .addCase(fetchPublicCertifications.fulfilled, (state, action) => {
         state.loading = false;
-        state.items = action.payload || [];
+        state.items = action.payload.items || [];
+        state.sectionTitle = action.payload.sectionTitle || 'Certifications';
       })
       .addCase(fetchPublicCertifications.rejected, (state, action) => {
         state.loading = false;

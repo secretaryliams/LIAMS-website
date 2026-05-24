@@ -5,13 +5,11 @@ import Reveal from '../components/motion/Reveal';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPublicCertifications } from '../store/slices/publicCertificationsSlice';
-import { useCertificationsSectionTitle } from '../hooks/useSiteSettings';
 import './Certificates.css';
 
 export default function Certificates() {
   const dispatch = useDispatch();
-  const { items: certifications, loading } = useSelector((state) => state.publicCertifications);
-  const { sectionTitle } = useCertificationsSectionTitle();
+  const { items: certifications, sectionTitle, loading } = useSelector((state) => state.publicCertifications);
 
   useEffect(() => {
     dispatch(fetchPublicCertifications());

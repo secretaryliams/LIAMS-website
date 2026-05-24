@@ -1,7 +1,7 @@
 export const institute = {
   name: 'Loyola Institute of Advanced Multidisciplinary Studies',
   shortName: 'LIAMS',
-  tagline: 'Your Premier Partner for Multidisciplinary Research and Institutional Excellence. Providing End-To-End Guidance for Scholars, Researchers, Educators, and Universities. Bridging Academia with Industry.',
+  tagline: ' Empowering Multidisciplinary Research and Innovation & Academic Excellence.',
   contact: {
     phone: '+91 6374599661',
     emails: [
@@ -13,7 +13,7 @@ export const institute = {
       {
         id: 'head-office',
         name: 'Head Office (Kerala)',
-        address: '9/18, West Chakingal Street, Thrissur – 680588, Kerala, India.'
+        address: '6/20, Chakingal Street, Thrissur – 680588, Kerala, India.'
       },
       {
         id: 'chennai-office',
@@ -56,18 +56,18 @@ export const navLinks = [
 
 export const pageNavSections = {
   '/': [
-    { id: 'vision-mission', label: 'Vision & Mission' },
     { id: 'what-we-offer', label: 'What We Offer' },
     { id: 'upcoming-events', label: 'Upcoming Events' },
     { id: 'testimonials', label: 'Testimonials' },
   ],
   '/about': [
     { id: 'who-we-are', label: 'Who We Are' },
-    { id: 'core-objectives', label: 'Core Objectives' },
+    { id: 'vision-mission', label: 'Vision & Mission' },
     { id: 'our-story', label: 'Our Story' },
     { id: 'academic-leadership', label: 'Academic Leadership' },
     { id: 'directors-message', label: "Director's Message" },
     { id: 'advisory-board', label: 'Advisory Board' },
+    { id: 'core-objectives', label: 'Core Objectives' },
   ],
   '/training': [
     { id: 'introduction', label: 'Introduction' },
@@ -390,6 +390,7 @@ export const objectivesIntro =
 export const objectivesSections = [
   {
     title: '1. Academic Knowledge Dissemination & Skill Building',
+    image: '/images/obj_academic.png',
     items: [
       {
         label: 'Global Academic Events',
@@ -407,6 +408,7 @@ export const objectivesSections = [
   },
   {
     title: '2. Research, Innovation & Intellectual Property',
+    image: '/images/obj_research.png',
     items: [
       {
         label: 'Comprehensive Research Support',
@@ -428,6 +430,7 @@ export const objectivesSections = [
   },
   {
     title: '3. Institutional Growth & Strategic Collaboration',
+    image: '/images/obj_growth.png',
     items: [
       {
         label: 'Global and National Collaborations',
@@ -458,12 +461,12 @@ export const advisoryBoard = [
   { name: 'Dr. A. Infantraj, M.E., Ph.D.', designation: 'Director, Infintin Mobility Solutions Pvt Ltd., Chennai', field: 'Industry Collaboration' },
   { name: 'Mr. S. Dinesh, B.E., M.E.', designation: 'Co-founder, Welkinrim Technologies, Chennai', field: 'Technology Entrepreneurship' },
   { name: 'Mr. Mahesh Sekar, B.Com., MBA, ACS', designation: 'Company Secretary, Information & Technology Department, Tamil Nadu Arasu Cable TV Corporation Ltd.', field: 'Governance & Operations' },
-  { name: 'Dr. Antony Samrat', designation: 'Academic Advisor', field: 'Research Strategy' },
-  { name: 'Mr. Prince', designation: 'Industry Advisor', field: 'Innovation Partnerships' },
-  { name: 'Dr. Premkumar', designation: 'Academic Advisor', field: 'Collaborative Research' },
-  { name: 'Dr. Sajeev Kamoj', designation: 'Academic Advisor', field: 'Research Leadership' },
-  { name: 'Dr. Subathra', designation: 'Academic Advisor', field: 'Educational Excellence' },
-  { name: 'Dr. Rajalakshmanan', designation: 'Academic Advisor', field: 'Institutional Collaboration' },
+  { name: 'Dr. Antony Vincent Samrot, M.Sc., M.Phil., M.Tech., Ph.D.', designation: 'Associate Professor & Director of RMC, Research Management Centre', field: 'Manipal University College Malaysia (MUCM)' },
+  { name: 'Mr. S. Prince, B.E.', designation: 'Chief Mechanic - Shelf Drilling', field: 'Dubai, United Arab Emirates' },
+  { name: 'Dr. Premkumar Samuel S D, Ph.D.', designation: 'Application Specialist, ISO Manager, Central Analytical & Applied Research Unit', field: 'Sultan Qaboos University, Oman' },
+  { name: 'Dr. Sanjeev Kanojiya, Ph.D.', designation: 'Sr. Principal Scientist (Grade F) & Prof. AcSIR', field: 'CSIR-Central Drug Research Institute, Lucknow' },
+  { name: 'Dr. E. Rajalakshmanan, Ph.D.', designation: 'Senior Scientist – Bioinorganic & Organic Chemist, Tissue Engineer & Regenerative Medicine Expert', field: 'Kemin Industries, Chennai' },
+  { name: 'Dr. N. S. Nirmala Jothi, Ph.D.', designation: 'Associate Professor, Department of Physics', field: 'Loyola College (Autonomous), Chennai' },
 ];
 
 export const trainingIntro =
@@ -473,19 +476,19 @@ export const trainingSections = [
   {
     id: 'internships',
     title: 'Industry-oriented Internships',
-    image: '/images/training/internships.jpg',
+    image: '/images/training/internships.png',
     text: 'We offer rigorous, short-term and long-term internship programs for students from Engineering, Arts, and Science backgrounds. These programs focus on bridging theoretical knowledge with practical, industry-standard tools and methodologies, ensuring graduates are fully equipped for the modern workforce.',
   },
   {
     id: 'fdps',
     title: 'Faculty Development Programs (FDPs)',
-    image: '/images/training/fdps.jpg',
+    image: '/images/training/fdps.png',
     text: 'Our FDPs empower educators to stay at the forefront of their respective fields. Our programs cover modern trends, pedagogical innovations, and advanced technical skills, facilitating comprehensive professional growth for college and university faculties.',
   },
   {
     id: 'sttp',
     title: 'Workshop & Short-Term Training Program (STTP)',
-    image: '/images/training/sttp.jpg',
+    image: '/images/training/sttp.png',
     text: 'From mastering advanced software applications to exploring emerging technologies, our intensive workshops and short-term training programs provide hands-on, practical experience for both faculty and students.',
   },
 ];
@@ -496,25 +499,25 @@ export const researchSections = [
   {
     id: 'research-lab',
     title: 'Research & Innovation Lab',
-    image: '/images/research/lab.jpg',
+    image: '/images/research/lab.png',
     text: 'At the heart of our institute is our cutting-edge Research and Innovation Lab. Equipped with advanced computational tools and state-of-the-art software facilities, it provides faculty, research scholars, and students with the necessary resources to conduct high-level simulations, data analysis, and technical modeling across diverse engineering and scientific domains.',
   },
   {
     id: 'phd-support',
     title: 'End-to-End PhD/Research Support',
-    image: '/images/research/phd.jpg',
+    image: '/images/research/phd.png',
     text: 'Navigating doctoral research requires precision and expert mentorship. We offer comprehensive, end-to-end support for PhD research scholars. From literature review and problem identification to methodology design, data analysis, and final thesis formatting, our expert panel ensures your research meets global academic standards.',
   },
   {
     id: 'conferences',
     title: 'Conferences',
-    image: '/images/research/conferences.jpg',
+    image: '/images/research/conferences.png',
     text: 'We host premier gatherings (International/National Level Conferences or workshops) that bring together global thought leaders, providing scholars the opportunity to present their findings, publish in recognized proceedings, and network with peers.',
   },
   {
     id: 'publication',
     title: 'Publication & Indexing Assistance',
-    image: '/images/research/publication.jpg',
+    image: '/images/research/publication.png',
     bullets: [
       'H-index & i10 index – Improvement in publication metrics',
       'Targeted Indexing: Guidance for publishing in reputed journals/book chapters indexed in SCI, SCOPUS, Web of Science, and the UGC CARE list.',
@@ -526,7 +529,7 @@ export const researchSections = [
   {
     id: 'ipr',
     title: 'Intellectual Property Rights (IPR) Consulting',
-    image: '/images/research/ipr.jpg',
+    image: '/images/research/ipr.png',
     text: 'Protecting your innovations is paramount. We offer professional IPR consulting services, assisting researchers and institutions with patent drafting (innovation or design patent), filing procedures, and copyright registrations to secure their intellectual assets.',
   },
 ];
@@ -541,31 +544,31 @@ export const collaborationSections = [
   {
     id: 'collaborations-mou',
     title: 'Collaboration & MoUs',
-    image: '/images/collaborations/mou.jpg',
+    image: '/images/collaborations/mou.png',
     text: 'We believe in the power of synergy. We actively seek collaborations with universities, colleges, industries, and research organizations. Through strategic Memorandums of Understanding (MoUs), we facilitate faculty exchange, joint research initiatives, and shared infrastructure utilization to elevate the academic landscape.',
   },
   {
     id: 'accreditation',
     title: 'Accreditation & Ranking Support',
-    image: '/images/collaborations/accreditation.jpg',
+    image: '/images/collaborations/accreditation.png',
     text: 'Achieving top-tier institutional recognition requires meticulous documentation and quality enhancement. Our consultancy wing provides expert, step-by-step guidance for institutions preparing for national and international accreditations and rankings. We help streamline academic audits, curriculum frameworks, and research output tracking to ensure your institution meets stringent evaluation criteria.',
   },
   {
     id: 'knowledge-sharing',
     title: 'Knowledge Sharing Initiatives',
-    image: '/images/collaborations/knowledge.jpg',
+    image: '/images/collaborations/knowledge.png',
     text: 'Through our collaborative networks, we routinely host joint webinars, guest lectures, and industry-academia conclaves, ensuring our partner institutions remain at the cutting edge of educational advancements.',
   },
   {
     id: 'research-labs',
     title: 'Research & Innovation Labs',
-    image: '/images/collaborations/research-lab.jpg',
+    image: '/images/collaborations/research-lab.png',
     text: 'End-to-end research infrastructure enabling advanced experimentation, applied research, and accelerated innovation for academia and industry. Artificial Intelligence studies, Application Machine Learning & Deep Learning in the multidisciplinary domains, Electric Vehicle design, Finite element analysis, Embedded based controllers for motor drives are the thrust areas we are focusing on. Collaboration from individual researchers, research centers, colleges, and universities are invited.',
   },
   {
     id: 'startup-msme',
     title: 'Startup & MSME Ecosystem Enabler',
-    image: '/images/collaborations/startup.jpg',
+    image: '/images/collaborations/startup.png',
     text: 'AI-driven incubation and ecosystem support to accelerate ideation, validation, and scalable market entry for startups and MSMEs. We enable students, innovators, and early-stage founders to transform ideas into validated, market-ready ventures through AI-powered prototyping, mentorship, incubation, and ecosystem support. Turn students\' startup ideas from institutes and universities into validated concepts and build AI-powered prototypes for rapid market-ready startup launch.',
   },
 ];

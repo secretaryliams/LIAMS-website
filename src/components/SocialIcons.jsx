@@ -45,6 +45,7 @@ export default function SocialIcons({ className = '' }) {
             rel="noopener noreferrer"
             aria-label={name}
             title={name}
+            className={`social-icon social-icon--${id}`}
           >
             {icons[id]}
           </a>

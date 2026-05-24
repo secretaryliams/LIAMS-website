@@ -105,10 +105,35 @@ h3 {
 
 p {
   margin-bottom: 1rem;
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 p:last-child {
   margin-bottom: 0;
+}
+
+/* Ensure paragraphs in aligned/helper containers inherit their alignment correctly */
+.text-center p,
+.text-left p,
+.text-right p,
+.section__header p,
+.cta-banner p,
+.cta-banner__inner p,
+.page-hero__content p,
+.page-cta p,
+.empty-state p,
+.contact-social-section__card p,
+.contact-form__privacy-note,
+.footer__brand p,
+.hero__content p,
+.hero__intro,
+.director-message__warm,
+.admin-card p,
+.admin-panel p,
+.admin-muted {
+  text-align: inherit;
+  text-justify: auto;
 }
 
 ul {
@@ -137,7 +162,7 @@ ul {
 .section__label {
   display: inline-block;
   font-family: var(--font-sans);
-  font-size: 0.8rem;
+  font-size: clamp(1.1rem, 2.2vw, 1.35rem);
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
