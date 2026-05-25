@@ -16,27 +16,59 @@ export default function ImageViewer({ imageSrc, alt, onClose }) {
   const [isDragging, setIsDragging] = useState(false);
 
   const viewerRef = useRef(null);
+  const viewportRef = useRef(null);
   const imgRef = useRef(null);
   const dragStart = useRef({ x: 0, y: 0 });
   const lastTouchDist = useRef(0);
 
-  // 1. Keyboard Navigation (Escape to close) and body overflow hide
+  // 1. Keyboard & Manual Non-Passive Event Listeners (Guarantees absolute size-lock on zoom)
   useEffect(() => {
+    const viewerElement = viewerRef.current;
+    const viewportElement = viewportRef.current;
+    if (!viewerElement || !viewportElement) return;
+
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
+    };
+
+    const handleWheel = (e) => {
+      // Prevent browser default trackpad pinch zoom or mouse scroll page zoom
+      e.preventDefault();
+      
+      const zoomIntensity = 0.08;
+      const delta = e.deltaY < 0 ? 1 : -1;
+      const factor = delta * zoomIntensity;
+      
+      setScale((prevScale) => {
+        const nextScale = Math.max(1, Math.min(5, prevScale + factor));
+        if (nextScale === 1) {
+          setPosition({ x: 0, y: 0 });
+        }
+        return nextScale;
+      });
+    };
+
+    const handleTouchMovePrevent = (e) => {
+      // If two fingers are pinching, block browser level page scale
+      if (e.touches.length === 2) {
+        e.preventDefault();
+      }
     };
 
     document.body.style.overflow = 'hidden';
     window.addEventListener('keydown', handleKeyDown);
     
-    // Focus containment on mount
-    if (viewerRef.current) {
-      viewerRef.current.focus();
-    }
+    // Register event listeners as NON-PASSIVE (Required to permit e.preventDefault() in modern engines)
+    viewerElement.addEventListener('wheel', handleWheel, { passive: false });
+    viewportElement.addEventListener('touchmove', handleTouchMovePrevent, { passive: false });
+    
+    viewerElement.focus();
 
     return () => {
       document.body.style.overflow = '';
       window.removeEventListener('keydown', handleKeyDown);
+      viewerElement.removeEventListener('wheel', handleWheel);
+      viewportElement.removeEventListener('touchmove', handleTouchMovePrevent);
     };
   }, [onClose]);
 
@@ -182,7 +214,6 @@ export default function ImageViewer({ imageSrc, alt, onClose }) {
       aria-label={alt || 'Image details viewer'}
       tabIndex="-1"
       onClick={onClose}
-      onWheel={handleWheel}
     >
       {/* Lightbox Close Button */}
       <button
@@ -199,6 +230,7 @@ export default function ImageViewer({ imageSrc, alt, onClose }) {
 
       {/* Main Image Viewport Area */}
       <div 
+        ref={viewportRef}
         className="iv-viewport"
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}

@@ -15,6 +15,7 @@
   overflow: hidden;
   user-select: none;
   -webkit-user-select: none;
+  touch-action: none; /* Locks native browser pinch-zooming on the entire dialog layout */
   outline: none;
   animation: ivOverlayFadeIn 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
