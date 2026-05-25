@@ -96,13 +96,21 @@ export const resetPassword = createAsyncThunk(
   async (email, { rejectWithValue }) => {
     try {
       if (!supabase) throw new Error('Supabase is not configured');
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/admin/update-password`,
+      
+      const redirectTo = `${window.location.origin}/admin/reset-password`;
+      console.log("[Supabase Auth] Triggering resetPasswordForEmail for:", email, "with redirectTo:", redirectTo);
+      
+      const response = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo,
       });
-      if (error) throw error;
+      
+      console.log("[Supabase Auth] resetPasswordForEmail Response:", response);
+      
+      if (response.error) throw response.error;
       return true;
     } catch (error) {
-      return rejectWithValue(error.message);
+      console.error("[Supabase Auth] resetPasswordForEmail Failed:", error);
+      return rejectWithValue(error.message || 'Failed to trigger reset email');
     }
   }
 );
