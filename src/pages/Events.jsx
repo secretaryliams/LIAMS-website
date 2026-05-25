@@ -2,9 +2,10 @@ import { Link } from 'react-router-dom';
 import EmptyState from '../components/EmptyState';
 import PageHero from '../components/PageHero';
 import PreviousEventsGallery from '../components/PreviousEventsGallery';
+import ImageViewer from '../components/ImageViewer';
 import Reveal from '../components/motion/Reveal';
 import StaggerGrid from '../components/motion/StaggerGrid';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPublicUpcomingEvents } from '../store/slices/publicEventsSlice';
 import { eventsExpertise, eventsPartnerText } from '../data/siteData';
@@ -13,6 +14,7 @@ import './Events.css';
 export default function Events() {
   const dispatch = useDispatch();
   const { upcoming: events, loadingUpcoming: loading } = useSelector((state) => state.publicEvents);
+  const [lightbox, setLightbox] = useState(null);
 
   useEffect(() => {
     dispatch(fetchPublicUpcomingEvents());
@@ -41,7 +43,19 @@ export default function Events() {
               {events.map((event) => (
                 <article key={event.id} className="card event-card">
                   {event.image_url && (
-                    <img src={event.image_url} alt="" className="event-card__image" />
+                    <button
+                      type="button"
+                      className="event-card__image-btn"
+                      onClick={() =>
+                        setLightbox({
+                          src: event.image_url,
+                          alt: event.title || 'Upcoming event',
+                        })
+                      }
+                      aria-label="View full image"
+                    >
+                      <img src={event.image_url} alt="" className="event-card__image" />
+                    </button>
                   )}
                   <span className="event-card__status">Upcoming</span>
                   <h3>{event.title}</h3>
@@ -98,6 +112,14 @@ export default function Events() {
           </p>
         </Reveal>
       </section>
+
+      {lightbox && (
+        <ImageViewer
+          imageSrc={lightbox.src}
+          alt={lightbox.alt}
+          onClose={() => setLightbox(null)}
+        />
+      )}
     </>
   );
 }

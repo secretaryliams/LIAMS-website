@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPublicPreviousEvents } from '../store/slices/publicEventsSlice';
-import ImageLightbox from './ImageLightbox';
+import ImageViewer from './ImageViewer';
 import { Autoplay, Navigation, Pagination, A11y } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import EmptyState from './EmptyState';
@@ -182,8 +182,8 @@ export default function PreviousEventsGallery() {
       <div ref={paginationRef} className="pe-carousel__pagination" />
 
       {lightbox && (
-        <ImageLightbox
-          src={lightbox.src}
+        <ImageViewer
+          imageSrc={lightbox.src}
           alt={lightbox.alt}
           onClose={() => setLightbox(null)}
         />
