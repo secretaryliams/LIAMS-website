@@ -11,6 +11,7 @@ import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 import { z } from 'zod';
 import { createClient } from '@supabase/supabase-js';
+import nodemailer from 'nodemailer';
 import path from 'path';
 
 // 1. Environment Configurations
@@ -48,6 +49,24 @@ const supabase = createClient(supabaseUrl, supabaseServiceRole || process.env.VI
     persistSession: false,
     autoRefreshToken: false
   }
+});
+
+// ── Nodemailer SMTP transporter (Hostinger) ──────────────────────────────────
+const smtpTransporter = nodemailer.createTransport({
+  host:   process.env.SMTP_HOST || 'smtp.hostinger.com',
+  port:   Number(process.env.SMTP_PORT) || 465,
+  secure: true,   // port 465 = SSL
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
+
+// Verify SMTP config at startup (logs warning, does not crash)
+smtpTransporter.verify().then(() => {
+  console.log('[SMTP] Hostinger transporter ready ✓');
+}).catch((err) => {
+  console.error('[SMTP] Transporter verify failed — check SMTP_* env vars:', err.message);
 });
 
 // 2. Global Security Middlewares
@@ -133,7 +152,8 @@ app.use('/api/auth/invite', (req, res) => {
   });
 });
 
-// Endpoint A: Forgot Password Handler (Enumeration Proof)
+// Endpoint A: Forgot Password — generates reset link via Supabase Admin API,
+//             sends it through Hostinger SMTP (bypasses Supabase email rate limits)
 app.post('/api/auth/forgot-password', forgotPasswordLimiter, async (req, res) => {
   const schema = z.object({
     email: z.string().email('Invalid email address')
@@ -145,20 +165,25 @@ app.post('/api/auth/forgot-password', forgotPasswordLimiter, async (req, res) =>
   }
 
   const { email } = parsed.data;
+
+  // Always return this regardless of outcome — prevents user enumeration
   const genericResponse = {
     success: true,
     message: 'If your email is registered in our admin database, you will receive a password reset link shortly.'
   };
 
-  // Guard: refuse to send email if CLIENT_URL is not configured (would generate broken link)
   if (!clientUrl) {
-    console.error(`[forgot-password] Aborting: CLIENT_URL is not set. Cannot build a valid redirectTo for ${email}.`);
-    // Return generic success to avoid user enumeration, but log the real problem
+    console.error('[forgot-password] Aborting: CLIENT_URL is not set.');
+    return res.status(200).json(genericResponse);
+  }
+
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.error('[forgot-password] Aborting: SMTP_USER / SMTP_PASS not set.');
     return res.status(200).json(genericResponse);
   }
 
   try {
-    // 1. Query public.admin_users to check admin existence and role
+    // 1. Verify this is a registered, active admin
     const { data: admin, error: dbError } = await supabase
       .from('admin_users')
       .select('auth_user_id, role, is_active')
@@ -166,37 +191,98 @@ app.post('/api/auth/forgot-password', forgotPasswordLimiter, async (req, res) =>
       .maybeSingle();
 
     if (dbError) {
-      console.error('Database query failed for forgot-password check:', dbError.message);
-      return res.status(200).json(genericResponse); // Safe fallback
+      console.error('[forgot-password] DB query failed:', dbError.message);
+      return res.status(200).json(genericResponse);
     }
 
-    // 2. If user exists and is active admin
-    if (admin && admin.is_active) {
-      const redirectUrl = `${clientUrl}/admin/reset-password`;
-      console.log(`[forgot-password] Sending reset email to ${email} with redirectTo: ${redirectUrl}`);
-
-      // Trigger Supabase Auth Reset Link
-      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: redirectUrl
-      });
-
-      if (resetError) {
-        console.error('[forgot-password] Supabase reset password request failed:', resetError.message);
-        return res.status(200).json(genericResponse);
-      }
-
-      // Write to audit log
-      await logAuditEvent(admin.auth_user_id, `password_reset_requested_email: ${email}`, req);
-      console.log(`[forgot-password] Success: reset email triggered for active admin: ${email}`);
-    } else {
-      // Prevent user enumeration: log skipped email
+    if (!admin || !admin.is_active) {
       await logAuditEvent(null, `unregistered_or_inactive_forgot_password_attempt: ${email}`, req);
-      console.log(`[forgot-password] Enumeration Shield: skipping trigger for non-admin: ${email}`);
+      console.log(`[forgot-password] Enumeration shield: skipping for non-admin: ${email}`);
+      return res.status(200).json(genericResponse);
     }
+
+    // 2. Generate a real Supabase recovery link (no email sent by Supabase)
+    const redirectTo = `${clientUrl}/admin/reset-password`;
+    const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
+      type: 'recovery',
+      email,
+      options: { redirectTo }
+    });
+
+    if (linkError || !linkData?.properties?.action_link) {
+      console.error('[forgot-password] generateLink failed:', linkError?.message);
+      return res.status(200).json(genericResponse);
+    }
+
+    const resetLink = linkData.properties.action_link;
+    console.log(`[forgot-password] Reset link generated for ${email}`);
+
+    // 3. Send via Hostinger SMTP — no Supabase rate limits, full deliverability
+    await smtpTransporter.sendMail({
+      from: `"LIAMS Admin" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+      to: email,
+      subject: 'Reset Your LIAMS Admin Password',
+      text: `Click the link below to reset your password (valid for 1 hour):\n\n${resetLink}\n\nIf you did not request this, ignore this email.`,
+      html: `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+        <body style="margin:0;padding:0;background:#f1f5f9;font-family:system-ui,sans-serif">
+          <table width="100%" cellpadding="0" cellspacing="0" style="background:#f1f5f9;padding:40px 16px">
+            <tr><td align="center">
+              <table width="100%" style="max-width:520px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08)">
+                <!-- Header -->
+                <tr>
+                  <td style="background:linear-gradient(135deg,#0f172a 0%,#0f4c81 60%,#1e6bb8 100%);padding:32px 40px;text-align:center">
+                    <p style="margin:0;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#c5a059">LIAMS — Admin Portal</p>
+                    <h1 style="margin:12px 0 0;color:#fff;font-size:22px;font-weight:700">Password Reset Request</h1>
+                  </td>
+                </tr>
+                <!-- Body -->
+                <tr>
+                  <td style="padding:36px 40px">
+                    <p style="margin:0 0 16px;color:#334155;font-size:15px;line-height:1.6">
+                      You requested a password reset for your LIAMS Admin account.
+                      Click the button below to set a new password.
+                    </p>
+                    <p style="margin:0 0 28px;color:#334155;font-size:15px;line-height:1.6">
+                      This link is valid for <strong>1 hour</strong>. If you didn't request this, you can safely ignore this email.
+                    </p>
+                    <div style="text-align:center;margin-bottom:32px">
+                      <a href="${resetLink}"
+                         style="display:inline-block;background:linear-gradient(135deg,#0f4c81,#1e6bb8);color:#fff;text-decoration:none;padding:14px 36px;border-radius:8px;font-weight:700;font-size:15px;letter-spacing:.02em">
+                        Reset My Password
+                      </a>
+                    </div>
+                    <p style="margin:0;font-size:12px;color:#94a3b8;line-height:1.6">
+                      If the button doesn't work, copy and paste this link into your browser:<br>
+                      <a href="${resetLink}" style="color:#0f4c81;word-break:break-all">${resetLink}</a>
+                    </p>
+                  </td>
+                </tr>
+                <!-- Footer -->
+                <tr>
+                  <td style="background:#f8fafc;padding:20px 40px;border-top:1px solid #e2e8f0;text-align:center">
+                    <p style="margin:0;font-size:12px;color:#94a3b8">
+                      LIAMS — Lanceolate Institute of Advanced Management & Science<br>
+                      This is an automated security email. Do not reply.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td></tr>
+          </table>
+        </body>
+        </html>
+      `
+    });
+
+    console.log(`[forgot-password] Email sent successfully to ${email} via Hostinger SMTP`);
+    await logAuditEvent(admin.auth_user_id, `password_reset_email_sent: ${email}`, req);
 
     return res.status(200).json(genericResponse);
   } catch (err) {
-    console.error('[forgot-password] System error:', err);
+    console.error('[forgot-password] System error:', err.message);
     return res.status(200).json(genericResponse);
   }
 });

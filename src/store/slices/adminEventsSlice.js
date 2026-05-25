@@ -52,7 +52,7 @@ export const fetchPreviousEvents = createAsyncThunk(
     const { data, error } = await supabase
       .from('previous_events')
       .select('*')
-      .order('event_date', { ascending: false, nullsFirst: false });
+      .order('created_at', { ascending: false, nullsFirst: false });
 
     if (error) return rejectWithValue(error.message);
     return data;

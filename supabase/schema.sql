@@ -53,11 +53,13 @@ alter table certifications enable row level security;
 alter table site_settings enable row level security;
 
 -- announcements
+drop policy if exists "Public read enabled announcements" on announcements;
 create policy "Public read enabled announcements"
   on announcements for select
   to anon
   using (enabled = true);
 
+drop policy if exists "Admin full access announcements" on announcements;
 create policy "Admin full access announcements"
   on announcements for all
   to authenticated
@@ -65,11 +67,13 @@ create policy "Admin full access announcements"
   with check (true);
 
 -- upcoming_events
+drop policy if exists "Public read enabled upcoming_events" on upcoming_events;
 create policy "Public read enabled upcoming_events"
   on upcoming_events for select
   to anon
   using (enabled = true);
 
+drop policy if exists "Admin full access upcoming_events" on upcoming_events;
 create policy "Admin full access upcoming_events"
   on upcoming_events for all
   to authenticated
@@ -77,11 +81,13 @@ create policy "Admin full access upcoming_events"
   with check (true);
 
 -- previous_events
+drop policy if exists "Public read previous_events" on previous_events;
 create policy "Public read previous_events"
   on previous_events for select
   to anon
   using (true);
 
+drop policy if exists "Admin full access previous_events" on previous_events;
 create policy "Admin full access previous_events"
   on previous_events for all
   to authenticated
@@ -89,11 +95,13 @@ create policy "Admin full access previous_events"
   with check (true);
 
 -- certifications
+drop policy if exists "Public read certifications" on certifications;
 create policy "Public read certifications"
   on certifications for select
   to anon
   using (true);
 
+drop policy if exists "Admin full access certifications" on certifications;
 create policy "Admin full access certifications"
   on certifications for all
   to authenticated
@@ -101,11 +109,13 @@ create policy "Admin full access certifications"
   with check (true);
 
 -- site_settings
+drop policy if exists "Public read site_settings" on site_settings;
 create policy "Public read site_settings"
   on site_settings for select
   to anon, authenticated
   using (true);
 
+drop policy if exists "Admin write site_settings" on site_settings;
 create policy "Admin write site_settings"
   on site_settings for all
   to authenticated
