@@ -4,6 +4,8 @@ import Layout from './components/Layout';
 import ProtectedAdminRoute from './routes/ProtectedAdminRoute';
 import Loader from './components/common/Loader';
 import AuthInitializer from './components/common/AuthInitializer';
+import { useOnlineStatus } from './hooks/useOnlineStatus';
+import OfflinePage from './components/OfflinePage';
 import './pages/Shared.css';
 import './pages/admin/Admin.css';
 
@@ -30,6 +32,12 @@ const PreviousEvents = lazy(() => import('./pages/admin/PreviousEvents'));
 const Certifications = lazy(() => import('./pages/admin/Certifications'));
 
 export default function App() {
+  const isOnline = useOnlineStatus();
+
+  if (!isOnline) {
+    return <OfflinePage />;
+  }
+
   return (
     <BrowserRouter>
       <AuthInitializer>
