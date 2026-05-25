@@ -8,6 +8,9 @@
 
 const CACHE_NAME = 'liams-cache-v1.0.0';
 
+// Set to true to temporarily disable all service worker caching & interceptions for debugging
+const IS_DISABLED = false;
+
 // Core static assets required to bootstrap the basic offline app shell
 const CORE_ASSETS = [
   '/',
@@ -50,27 +53,21 @@ self.addEventListener('activate', (event) => {
 
 // 3. Fetch Event: Intercept network requests and provide smart fallbacks
 self.addEventListener('fetch', (event) => {
+  if (IS_DISABLED) return; // Bypass service worker completely if disabled
+  
   const request = event.request;
   const url = new URL(request.url);
 
   // Skip non-GET requests (such as POST APIs, Supabase calls, etc.)
   if (request.method !== 'GET') return;
 
-  // Strategy A: Navigation Requests (Users reloading or typing direct page routes like /about, /research)
+  // Strategy A: Navigation Requests (SPA Route loads or manual URL typing)
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
-        .then((response) => {
-          // If successful network call, dynamically update index.html cache in background
-          const responseClone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put('/index.html', responseClone);
-          });
-          return response;
-        })
-        .catch(() => {
-          // Network failed (Offline) -> Serve the cached offline App Shell (index.html)
-          console.log('[Service Worker] Offline: Serving App Shell fallback for navigation:', url.pathname);
+        .catch((err) => {
+          // Network failed (Offline) -> Serve the cached offline App Shell (/index.html)
+          console.log('[Service Worker] Navigation failed (offline), serving App Shell fallback:', err);
           return caches.match('/index.html');
         })
     );

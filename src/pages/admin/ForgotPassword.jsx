@@ -5,7 +5,7 @@ import { authService } from "../../services/authService";
 import "./Admin.css";
 
 export default function ForgotPassword() {
-  const { isConfigured } = useAuth();
+  const { isConfigured, resetPassword } = useAuth();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -15,11 +15,14 @@ export default function ForgotPassword() {
     e.preventDefault();
     setError("");
     setSubmitting(true);
+    console.log("[ForgotPassword] Submitting reset request for email:", email);
     try {
-      await authService.forgotPassword(email);
+      const response = await resetPassword(email);
+      console.log("[ForgotPassword] Supabase password reset request successfully processed:", response);
       setSuccess(true);
     } catch (err) {
-      setError(err.message || "Failed to send reset email");
+      console.error("[ForgotPassword] Reset submission failed:", err);
+      setError(err.message || "Failed to submit recovery request");
     } finally {
       setSubmitting(false);
     }
@@ -30,12 +33,17 @@ export default function ForgotPassword() {
       <div className="admin-page">
         <div className="admin-card admin-card--narrow">
           <h2>Check your email</h2>
-          <p className="admin-muted">
-            If account exists, reset link sent.
+          <p className="admin-muted" style={{ marginBottom: "1rem" }}>
+            If the email address <strong>{email}</strong> is registered in your Supabase Auth dashboard, a recovery link has been dispatched.
           </p>
-          <p className="admin-muted">
-            Didn't receive the email? Check your spam folder or try again.
-          </p>
+          <div className="admin-muted" style={{ fontSize: "0.85rem", background: "rgba(197, 160, 89, 0.08)", padding: "12px", borderRadius: "8px", border: "1px solid rgba(197, 160, 89, 0.18)", marginBottom: "1.5rem", textAlign: "left", lineHeight: "1.5" }}>
+            <strong>💡 Production Checklist:</strong>
+            <ul style={{ margin: "6px 0 0 0", paddingLeft: "16px" }}>
+              <li style={{ marginBottom: "4px" }}>Supabase free tiers limit emails to <strong>3 requests per hour</strong>. If exceeded, trigger attempts are silently blocked.</li>
+              <li style={{ marginBottom: "4px" }}>Check your <strong>Spam or Promotions</strong> inbox tabs if the message does not arrive within 2 minutes.</li>
+              <li>Attacking/unregistered emails are ignored silently by Supabase for user enumeration safety.</li>
+            </ul>
+          </div>
           <p className="admin-muted" style={{ marginTop: "1rem" }}>
             <Link to="/admin/login">← Back to sign in</Link>
           </p>
