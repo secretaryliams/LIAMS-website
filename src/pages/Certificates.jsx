@@ -18,7 +18,7 @@ export default function Certificates() {
   return (
     <>
       <PageHero
-        label="Certifications"
+        label={sectionTitle}
         title={sectionTitle}
         subtitle="View certificates and accreditation documents from LIAMS programmes and events."
       />

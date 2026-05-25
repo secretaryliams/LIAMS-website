@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import { institute, navLinks } from '../data/siteData';
+import { useCertificationsSectionTitle } from '../hooks/useSiteSettings';
 import SocialIcons from './SocialIcons';
 import './Footer.css';
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const { sectionTitle } = useCertificationsSectionTitle();
 
   return (
     <footer className="footer">
@@ -18,11 +20,14 @@ export default function Footer() {
         <div>
           <h4>Quick Links</h4>
           <ul className="footer__links">
-            {navLinks.map(({ path, label }) => (
-              <li key={path}>
-                <Link to={path}>{label}</Link>
-              </li>
-            ))}
+            {navLinks.map(({ path, label }) => {
+              const resolvedLabel = path === '/certificates' ? sectionTitle : label;
+              return (
+                <li key={path}>
+                  <Link to={path}>{resolvedLabel}</Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
 

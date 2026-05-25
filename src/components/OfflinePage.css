@@ -1,0 +1,239 @@
+/* LIAMS Offline Experience Stylesheet */
+/* Path: src/components/OfflinePage.css */
+
+.offline-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 999999; /* Absolute topmost layer over any overlay or modals */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #090d16 0%, #0f172a 100%);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #f8fafc;
+  overflow: hidden;
+  padding: 24px;
+}
+
+/* Ambient Radial Spheres for Premium Aesthetics */
+.offline-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.offline-glow__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.12;
+  mix-blend-mode: screen;
+  animation: floatOrb 12s infinite alternate ease-in-out;
+}
+
+.orb-blue {
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, #0f4c81 0%, rgba(15, 76, 129, 0) 70%);
+  top: -80px;
+  left: -80px;
+}
+
+.orb-gold {
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, #c5a059 0%, rgba(197, 160, 89, 0) 70%);
+  bottom: -100px;
+  right: -100px;
+  animation-delay: -6s;
+}
+
+/* Glassmorphism Presentation Card */
+.offline-card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 480px;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  padding: 48px 40px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  animation: cardFadeIn 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* SVG Wifi-Off Icons & Animations */
+.offline-icon-container {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(197, 160, 89, 0.05);
+  border: 1px solid rgba(197, 160, 89, 0.12);
+  margin-bottom: 32px;
+  color: #c5a059; /* Gold branding color */
+  box-shadow: 0 0 32px rgba(197, 160, 89, 0.05);
+}
+
+.offline-wifi-svg {
+  filter: drop-shadow(0 4px 12px rgba(197, 160, 89, 0.15));
+}
+
+.strike-line {
+  stroke: #ef4444; /* Alert color for offline */
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: drawLine 0.8s 0.2s forwards cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.wifi-arc-3 {
+  animation: pulseArc 2.5s infinite ease-in-out;
+}
+
+.wifi-arc-2 {
+  animation: pulseArc 2.5s 0.4s infinite ease-in-out;
+}
+
+.wifi-dot {
+  fill: currentColor;
+  animation: pulseArc 2.5s 0.8s infinite ease-in-out;
+}
+
+/* Header Typography */
+.offline-header h1 {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px 0;
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.offline-subtitle {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #c5a059; /* Dynamic gold */
+  margin: 0 0 20px 0;
+}
+
+.offline-description {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #94a3b8;
+  margin: 0 0 36px 0;
+}
+
+/* Retry Tactile Button & Interactivity */
+.offline-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.offline-retry-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 220px;
+  padding: 13px 24px;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(135deg, #0f4c81 0%, #1e6bb8 100%);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 8px 20px rgba(15, 76, 129, 0.25);
+}
+
+.offline-retry-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(15, 76, 129, 0.35);
+  background: linear-gradient(135deg, #125793 0%, #2276cb 100%);
+}
+
+.offline-retry-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.offline-retry-btn:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  box-shadow: none;
+}
+
+/* Spinner Icon */
+.offline-retry-btn .spinner {
+  animation: rotateSpinner 0.8s linear infinite;
+}
+
+/* Keyframes Definitions */
+@keyframes drawLine {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes pulseArc {
+  0%, 100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes floatOrb {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(30px, 20px) scale(1.1);
+  }
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes rotateSpinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Scaling support */
+@media (max-width: 480px) {
+  .offline-card {
+    padding: 36px 24px;
+  }
+  
+  .offline-header h1 {
+    font-size: 22px;
+  }
+  
+  .offline-icon-container {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 24px;
+  }
+}

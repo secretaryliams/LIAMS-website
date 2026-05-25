@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { navLinks, pageNavSections } from '../data/siteData';
+import { useCertificationsSectionTitle } from '../hooks/useSiteSettings';
 import './Header.css';
 
 function NavItem({
@@ -14,7 +15,11 @@ function NavItem({
   const location = useLocation();
   const isOnPage = location.pathname === path;
 
-  if (!sections.length) {
+  const resolvedSections = path === '/certificates'
+    ? sections.map(s => s.id === 'certifications' ? { ...s, label } : s)
+    : sections;
+
+  if (!resolvedSections.length) {
     return (
       <li>
         <NavLink to={path} end={path === '/'} className={({ isActive }) => (isActive ? 'active' : undefined)} onClick={closeMenu}>
@@ -40,7 +45,7 @@ function NavItem({
       </NavLink>
       {activeMenu === label && (
         <div className="header__submenu" role="menu">
-          {sections.map(({ id, label: sectionLabel }) => (
+          {resolvedSections.map(({ id, label: sectionLabel }) => (
             <Link
               key={id}
               to={`${path}#${id}`}
@@ -61,6 +66,7 @@ function NavItem({
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
+  const { sectionTitle } = useCertificationsSectionTitle();
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -74,7 +80,7 @@ export default function Header() {
             <small>Loyola Institute of Advanced Multidisciplinary Studies</small>
           </span>
         </Link>
-
+  
         <button
           type="button"
           className={`header__toggle ${menuOpen ? 'is-open' : ''}`}
@@ -86,19 +92,22 @@ export default function Header() {
           <span />
           <span />
         </button>
-
+  
         <nav className={`header__nav ${menuOpen ? 'is-open' : ''}`} aria-label="Main">
           <ul>
-            {navLinks.map(({ path, label }) => (
-              <NavItem
-                key={path}
-                path={path}
-                label={label}
-                closeMenu={closeMenu}
-                activeMenu={activeMenu}
-                setActiveMenu={setActiveMenu}
-              />
-            ))}
+            {navLinks.map(({ path, label }) => {
+              const resolvedLabel = path === '/certificates' ? sectionTitle : label;
+              return (
+                <NavItem
+                  key={path}
+                  path={path}
+                  label={resolvedLabel}
+                  closeMenu={closeMenu}
+                  activeMenu={activeMenu}
+                  setActiveMenu={setActiveMenu}
+                />
+              );
+            })}
           </ul>
           <Link to="/contact" className="btn btn--primary header__cta" onClick={closeMenu}>
             Contact Us
