@@ -54,7 +54,10 @@ Add storage policies in the dashboard (or uncomment the SQL block at the bottom 
 
 **Authentication → Providers** → enable **Email**.
 
-**Authentication → Users → Add user** (e.g. admin email + password).
+**Authentication → Users → Add user** → Create user with the secure email `secretary.liams@gmail.com` and a strong password.
+
+> [!NOTE]
+> For security, there is **no dynamic add/invite admin feature** in this application. Only the administrator account manually provisioned here is allowed access. All backend endpoints for invitations have been completely deactivated.
 
 ## 6. Admin panel
 

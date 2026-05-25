@@ -1,56 +1,70 @@
-# Supabase Admin & Security Setup Guide
+# Final Supabase Production & Security Setup Guide
 
-This guide details the exact steps required to configure your Supabase project for the newly built Enterprise Admin Authentication system. You do not need to create tables manually via the Supabase Table Editor UI.
-
-## Step 1: Run the Database Setup Script
-
-We have prepared a complete SQL script that will automatically create the tables, configure Row Level Security (RLS) rules, and set up the necessary database triggers.
-
-1. Open your Supabase Dashboard.
-2. Navigate to the **SQL Editor** from the left sidebar (the icon looks like a terminal window `>_`).
-3. Click the **"+ New query"** button.
-4. Open the file `supabase/migrations/20260522_create_admin_and_audit.sql` from your local codebase and copy all of its contents.
-5. Paste the entire SQL script into the Supabase SQL Editor.
-6. Click the green **Run** button at the bottom right.
-
-**What this script does:**
-- Creates the `admin_users` table to track your administrators and their roles (`super_admin`, `admin`, etc.).
-- Creates the `audit_logs` table for security monitoring.
-- Sets up Row Level Security (RLS) so users can only access what they are permitted to.
-- Creates a special "Trigger" that automatically adds the very first user you create as a `super_admin`.
+This guide describes the configuration required to secure and deploy the **LIAMS** database on Supabase in coordination with your **Vercel** production hosting and **Hostinger (`liams.in`)** SMTP service.
 
 ---
 
-## Step 2: Configure Redirect URLs for Forgot Password
-
-For the forgot password flow to work, Supabase needs explicit permission to redirect users back to your local application after they click the secure link in their email.
-
-1. Go to **Authentication** in the left sidebar of Supabase.
-2. Click on **URL Configuration** (under the Configuration section).
-3. Look for **Site URL** and ensure it is set to your frontend's address:
-   `http://localhost:5173`
-4. Under **Redirect URLs**, click **Add URL** and add the exact path to your reset password page:
-   `http://localhost:5173/admin/reset-password`
-   *(You can also add `http://localhost:5173/*` to allow all local paths during development)*
-5. Click **Save**.
+## 🔒 Enterprise-Grade Security Principles
+1. **No "Add Admin" or "Invite Admin" UI**: To protect the institute from unauthorized access, we have **completely removed all dynamic admin creation and invitation routes** from the application. 
+2. **Hardened SQL Provisioning**: Admin accounts can only be provisioned directly inside your Supabase dashboard. This eliminates any possibility of external attacker injections.
+3. **Audit Logged Events**: Every administrative login success, failure, lockout, or content modification is permanently recorded in the `audit_logs` table for tracking.
 
 ---
 
-## Step 3: Create Your First Admin Account
+## Step 1: Run the Database Setup Schema
 
-Because of the security trigger we set up in Step 1, the system is designed to "bootstrap" itself securely.
-
-1. The very first user account created in Supabase Authentication will automatically be synced into the `admin_users` table and granted the highest `super_admin` role.
-2. You can create this first user directly from the Supabase UI by going to **Authentication -> Users** and clicking **Add User -> Create new user**, or by signing up through your application (if you have a public signup page temporarily enabled).
+1. Log into your [Supabase Dashboard](https://app.supabase.com).
+2. Go to the **SQL Editor** on the left sidebar (the terminal `>_` icon).
+3. Click **"+ New query"** and name it `LIAMS Database Setup`.
+4. Open the file `supabase/schema.sql` from your local codebase, copy its entire contents, paste it into the editor, and click **Run**.
+5. Create another new query named `Admin Schema & Policies`.
+6. Open the file `supabase/migrations/20260522_create_admin_and_audit.sql` from your codebase, copy its entire contents, paste it into the SQL Editor, and click **Run**.
 
 ---
 
-## How the Secure Forgot Password Flow Works
+## Step 2: Manually Provision Your Administrative Account
 
-We built a highly secure setup to prevent hackers from guessing or enumerating email addresses:
+To authorize your primary administrator, create their login credentials directly in Supabase:
 
-1. When an email is entered on the Forgot Password screen, React sends it to your local Express backend server (`server/server.js`).
-2. The Express server bypasses RLS using its secure service role key and checks the `admin_users` table.
-3. If the email exists and belongs to an active admin, the Express server secretly tells Supabase to send the recovery email.
-4. Whether the email actually exists or not, the server sends back the exact same generic "Request Processed" message to the frontend. This prevents "user enumeration" attacks.
-5. When the user clicks the link in the email, Supabase securely redirects them to `http://localhost:5173/admin/reset-password` where they can establish their new secure password.
+1. In the Supabase Dashboard, go to **Authentication** -> **Users** from the left navigation bar.
+2. Click the **Add User** dropdown at the top right and select **Create User**.
+3. Set the email to your primary email address:
+   `secretary.liams@gmail.com`
+4. Assign a secure password and click **Create User**.
+5. *Note: The database trigger we established in Step 1 will automatically sync this email into the `admin_users` table, setting their status to active and assigning them the role of `super_admin`.*
+
+---
+
+## Step 3: Configure URL Redirection for Live Domain
+
+To ensure that the forgot password reset link works correctly when clicked from an email in production:
+
+1. Navigate to **Authentication** -> **URL Configuration** in the left sidebar of the Supabase dashboard.
+2. Under **Site URL**, change the value to your live production domain:
+   `https://liams.in`
+3. Under **Redirect URLs**, click **Add URL** and add the following two paths:
+   - `https://liams.in/admin/reset-password` *(for production resets)*
+   - `http://localhost:5173/admin/reset-password` *(keeps local offline testing working)*
+4. Click **Save**.
+
+---
+
+## Step 4: Configure Storage Buckets for Media Uploads
+
+For event photos and certificates to display on the public website:
+
+1. Navigate to **Storage** in the left sidebar.
+2. Click **New Bucket** at the top:
+   - Name: `event-images`
+   - **Public bucket**: Toggle **ON** (so visitors can see the uploaded event photos).
+3. Under **Bucket Policies**, ensure `SELECT` access is allowed for public anonymous users, and `INSERT`, `UPDATE`, and `DELETE` access is allowed only for **Authenticated** users.
+
+---
+
+## Step 5: Disable Supabase Default Emails (Bypassing Limits)
+
+Since we are using **Hostinger SMTP (`smtp.hostinger.com`)** via the serverless Express API to send reliable emails with zero rate limits, you must disable Supabase's built-in email reset triggers:
+
+1. Navigate to **Authentication** -> **Email Templates**.
+2. Select the **Reset Password** template.
+3. Toggle the **Enable Template** option to **OFF** or leave it empty, as all password reset requests are now captured by our Vercel API and sent via Nodemailer.
