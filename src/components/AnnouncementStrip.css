@@ -54,7 +54,7 @@
   white-space: nowrap;
   will-change: transform;
   transform: translate3d(0, 0, 0);
-  animation: announcement-marquee 45s linear infinite;
+  animation: announcement-marquee 65s linear infinite;
 }
 
 .announcement-strip__viewport:hover .announcement-strip__track {
@@ -94,7 +94,7 @@
 
   .announcement-strip__track {
     gap: 1.75rem;
-    animation-duration: 55s;
+    animation-duration: 80s;
   }
 
   .announcement-strip__item,
