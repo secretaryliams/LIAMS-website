@@ -2,19 +2,22 @@ import { Link } from 'react-router-dom';
 import EmptyState from '../components/EmptyState';
 import PageHero from '../components/PageHero';
 import PreviousEventsGallery from '../components/PreviousEventsGallery';
-import ImageViewer from '../components/ImageViewer';
 import Reveal from '../components/motion/Reveal';
 import StaggerGrid from '../components/motion/StaggerGrid';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPublicUpcomingEvents } from '../store/slices/publicEventsSlice';
 import { eventsExpertise, eventsPartnerText } from '../data/siteData';
+import { formatDisplayDate, isRegistrationClosed } from '../lib/eventFormat';
+import EventDetailsModal from '../components/EventDetailsModal';
+import ImageViewer from '../components/ImageViewer';
 import './Events.css';
 
 export default function Events() {
   const dispatch = useDispatch();
   const { upcoming: events, loadingUpcoming: loading } = useSelector((state) => state.publicEvents);
-  const [lightbox, setLightbox] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [posterEvent, setPosterEvent] = useState(null);
 
   useEffect(() => {
     dispatch(fetchPublicUpcomingEvents());
@@ -40,44 +43,87 @@ export default function Events() {
             <EmptyState message="No upcoming events" />
           ) : (
             <StaggerGrid className="events-list">
-              {events.map((event) => (
-                <article key={event.id} className="card event-card">
-                  {event.image_url && (
-                    <button
-                      type="button"
-                      className="event-card__image-btn"
-                      onClick={() =>
-                        setLightbox({
-                          src: event.image_url,
-                          alt: event.title || 'Upcoming event',
-                        })
-                      }
-                      aria-label="View full image"
-                    >
-                      <img src={event.image_url} alt="" className="event-card__image" />
-                    </button>
-                  )}
-                  <span className="event-card__status">Upcoming</span>
-                  <h3>{event.title}</h3>
-                  <p>
-                    <strong>Date:</strong> {event.dateLabel} &nbsp;|&nbsp;{' '}
-                    <strong>Venue:</strong> {event.venue}
-                  </p>
-                  {event.form_link && (
-                    <p>
-                      <a
-                        href={event.form_link}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="btn btn--secondary"
-                        style={{ marginTop: '0.75rem', display: 'inline-block' }}
+              {events.map((event) => {
+                const regClosed = isRegistrationClosed(event.registration_end_date);
+                return (
+                  <article
+                    key={event.id}
+                    className="card event-card"
+                  >
+                    {event.image_url && (
+                      <div
+                        className="event-card__image-container"
+                        style={{ cursor: 'zoom-in' }}
+                        onClick={() => setPosterEvent(event)}
+                        role="button"
+                        aria-label={`View full poster for ${event.title}`}
                       >
-                        Register / Submit
-                      </a>
-                    </p>
-                  )}
-                </article>
-              ))}
+                        <img src={event.image_url} alt={event.title} className="event-card__image" />
+                      </div>
+                    )}
+                    <div className="event-card__content">
+                      <div className="event-card__header-row">
+                        <span className={`event-card__pill-badge ${regClosed ? 'pill-badge--closed' : 'pill-badge--open'}`}>
+                          {regClosed ? '🔴 Registration Closed' : '🟢 Open for Registration'}
+                        </span>
+                      </div>
+                      
+                      <h3 className="event-card__title">{event.title}</h3>
+                      
+                      {event.description && (
+                        <p className="event-card__excerpt">{event.description}</p>
+                      )}
+                      
+                      <div className="event-card__divider" />
+                      
+                      <div className="event-card__metadata-grid">
+                        <div className="metadata-item">
+                          <span className="metadata-icon">📅</span>
+                          <div className="metadata-text">
+                            <strong>Event Dates</strong>
+                            <span>{formatDisplayDate(event.start_date || event.event_date)}{event.end_date ? ` – ${formatDisplayDate(event.end_date)}` : ''}</span>
+                          </div>
+                        </div>
+                        
+                        {event.registration_end_date && (
+                          <div className="metadata-item">
+                            <span className="metadata-icon">⏰</span>
+                            <div className="metadata-text">
+                              <strong>Registration Deadline</strong>
+                              <span>{formatDisplayDate(event.registration_end_date)}</span>
+                            </div>
+                          </div>
+                        )}
+                        
+                        <div className="metadata-item">
+                          <span className="metadata-icon">🌐</span>
+                          <div className="metadata-text">
+                            <strong>Venue</strong>
+                            <span>{event.venue || 'To Be Announced'}</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="event-card__actions" onClick={(e) => e.stopPropagation()}>
+                        <button type="button" className="btn btn--outline-navy" onClick={() => setSelectedEvent(event)}>
+                          View Details
+                        </button>
+                        {event.form_link && (
+                          <a
+                            href={regClosed ? undefined : event.form_link}
+                            target="_blank"
+                            rel="noreferrer"
+                            className={`btn ${regClosed ? 'btn--disabled' : 'btn--primary'}`}
+                            aria-disabled={regClosed}
+                          >
+                            Register Now
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
             </StaggerGrid>
           )}
         </div>
@@ -113,11 +159,18 @@ export default function Events() {
         </Reveal>
       </section>
 
-      {lightbox && (
+      {selectedEvent && (
+        <EventDetailsModal
+          event={selectedEvent}
+          onClose={() => setSelectedEvent(null)}
+        />
+      )}
+
+      {posterEvent && (
         <ImageViewer
-          imageSrc={lightbox.src}
-          alt={lightbox.alt}
-          onClose={() => setLightbox(null)}
+          imageSrc={posterEvent.image_url}
+          alt={posterEvent.title}
+          onClose={() => setPosterEvent(null)}
         />
       )}
     </>

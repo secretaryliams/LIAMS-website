@@ -392,3 +392,52 @@
     transform: none;
   }
 }
+
+/* Premium Date-Badge & Action styles in Ticker */
+.ticker-status-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  color: var(--white);
+}
+
+.ticker-status-badge--open {
+  background: var(--mint);
+}
+
+.ticker-status-badge--closed {
+  background: #ea580c;
+}
+
+.event-ticker__actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.event-ticker__link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--blue);
+  cursor: pointer;
+  transition: color var(--transition);
+}
+
+.event-ticker__link-btn:hover {
+  color: var(--gold-dark);
+}
+
+.event-ticker__link--disabled {
+  color: var(--gray-600) !important;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+

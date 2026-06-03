@@ -8,7 +8,7 @@ export const fetchUpcomingEvents = createAsyncThunk(
     const { data, error } = await supabase
       .from('upcoming_events')
       .select('*')
-      .order('event_date', { ascending: true, nullsFirst: false });
+      .order('start_date', { ascending: true, nullsFirst: false });
 
     if (error) return rejectWithValue(error.message);
     return data;
@@ -19,6 +19,19 @@ export const addUpcomingEvent = createAsyncThunk(
   'adminEvents/addUpcomingEvent',
   async (eventData, { dispatch, rejectWithValue }) => {
     const { error } = await supabase.from('upcoming_events').insert(eventData);
+    if (error) return rejectWithValue(error.message);
+    dispatch(fetchUpcomingEvents());
+    return true;
+  }
+);
+
+export const updateUpcomingEvent = createAsyncThunk(
+  'adminEvents/updateUpcomingEvent',
+  async ({ id, eventData }, { dispatch, rejectWithValue }) => {
+    const { error } = await supabase
+      .from('upcoming_events')
+      .update(eventData)
+      .eq('id', id);
     if (error) return rejectWithValue(error.message);
     dispatch(fetchUpcomingEvents());
     return true;
@@ -122,6 +135,9 @@ const adminEventsSlice = createSlice({
       })
       .addCase(addUpcomingEvent.rejected, (state, action) => {
         state.error = action.payload || 'Failed to add upcoming event';
+      })
+      .addCase(updateUpcomingEvent.rejected, (state, action) => {
+        state.error = action.payload || 'Failed to save changes to upcoming event';
       })
       .addCase(toggleUpcomingEvent.rejected, (state, action) => {
         state.error = action.payload || 'Failed to update upcoming event';

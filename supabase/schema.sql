@@ -16,6 +16,11 @@ create table if not exists upcoming_events (
   venue text,
   form_link text,
   enabled boolean default true,
+  image_url text,
+  start_date date,
+  end_date date,
+  registration_end_date date,
+  description text,
   created_at timestamptz default now()
 );
 
