@@ -4,18 +4,22 @@ import { formatEventDateLabel, formatEventDateParts } from '../../lib/eventForma
 import { formatEventVenue } from '../../lib/eventVenue';
 
 function mapUpcomingEvent(row) {
-  const parts = formatEventDateParts(row.event_date);
+  const primaryDate = row.start_date || row.event_date;
+  const parts = formatEventDateParts(primaryDate);
   return {
     id: String(row.id),
     title: row.title,
-    description: row.form_link
-      ? 'Registration / submission link available.'
-      : 'Details coming soon.',
+    description: row.description || (row.form_link
+      ? 'Registration / submission link available. Join us for this advanced session.'
+      : 'Details coming soon. Stay tuned for further announcements.'),
     form_link: row.form_link,
     image_url: row.image_url,
     event_date: row.event_date,
+    start_date: row.start_date,
+    end_date: row.end_date,
+    registration_end_date: row.registration_end_date,
     ...parts,
-    dateLabel: formatEventDateLabel(row.event_date),
+    dateLabel: formatEventDateLabel(primaryDate),
     venue: formatEventVenue(row.venue),
   };
 }
@@ -28,10 +32,16 @@ export const fetchPublicUpcomingEvents = createAsyncThunk(
         params: {
           select: '*',
           enabled: 'eq.true',
-          order: 'event_date.asc.nullsfirst', // Note: in PostgREST it's usually asc.nullsfirst or asc.nullslast
+          order: 'start_date.asc.nullsfirst',
         },
       });
-      return response.data.map(mapUpcomingEvent);
+      const mapped = response.data.map(mapUpcomingEvent);
+      // Sort in Javascript as well to ensure bulletproof ascending order by Start Date
+      return mapped.sort((a, b) => {
+        const dateA = a.start_date ? new Date(a.start_date) : new Date(a.event_date || '9999-12-31');
+        const dateB = b.start_date ? new Date(b.start_date) : new Date(b.event_date || '9999-12-31');
+        return dateA - dateB;
+      });
     } catch (error) {
       return rejectWithValue(error.message);
     }

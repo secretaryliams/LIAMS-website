@@ -12,6 +12,7 @@
   --gold-dark: #ca8a04;
   --gold-soft: #fef9c3;
   --mint: #10b981;
+  --green: var(--mint);
   --mint-dark: #059669;
   --mint-soft: #d1fae5;
   --violet: #7c3aed;

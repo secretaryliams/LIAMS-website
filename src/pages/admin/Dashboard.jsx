@@ -73,7 +73,7 @@ export default function Dashboard() {
           ascending: false,
         }),
 
-        supabase.from("upcoming_events").select("*").order("event_date", {
+        supabase.from("upcoming_events").select("*").order("start_date", {
           ascending: true,
           nullsFirst: false,
         }),

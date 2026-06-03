@@ -53,7 +53,8 @@
   gap: 2.5rem;
   white-space: nowrap;
   will-change: transform;
-  animation: announcement-marquee 18s linear infinite;
+  transform: translate3d(0, 0, 0);
+  animation: announcement-marquee 45s linear infinite;
 }
 
 .announcement-strip__viewport:hover .announcement-strip__track {
@@ -93,7 +94,7 @@
 
   .announcement-strip__track {
     gap: 1.75rem;
-    animation-duration: 22s;
+    animation-duration: 55s;
   }
 
   .announcement-strip__item,
@@ -107,9 +108,14 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .announcement-strip__viewport {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .announcement-strip__track {
     animation: none;
-    flex-wrap: wrap;
-    width: 100%;
+    transform: none;
+    width: max-content;
   }
 }

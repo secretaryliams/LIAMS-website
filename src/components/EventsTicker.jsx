@@ -1,36 +1,50 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPublicUpcomingEvents } from '../store/slices/publicEventsSlice';
 import EmptyState from './EmptyState';
 import Reveal from './motion/Reveal';
+import { isRegistrationClosed } from '../lib/eventFormat';
+import EventDetailsModal from './EventDetailsModal';
 import './EventsTicker.css';
 
 const EVENT_TAGS = ['Conferences', 'Symposia', 'Training'];
 
-function EventCard({ event }) {
+function EventCard({ event, onClick }) {
+  const regClosed = isRegistrationClosed(event.registration_end_date);
   return (
-    <article className="event-ticker__card">
+    <article className="event-ticker__card" onClick={onClick} style={{ cursor: 'pointer' }}>
       <div className="event-ticker__date">
         <span className="event-ticker__year">{event.year}</span>
         <span className="event-ticker__day">{event.day}</span>
         <span className="event-ticker__month">{event.month}</span>
       </div>
       <div className="event-ticker__body">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+          <span className={`ticker-status-badge ${regClosed ? 'ticker-status-badge--closed' : 'ticker-status-badge--open'}`}>
+            {regClosed ? 'Closed' : 'Upcoming'}
+          </span>
+        </div>
         <h3>{event.title}</h3>
         <p className="event-ticker__meta">
           {event.dateLabel} · {event.venue}
         </p>
-        {event.form_link && (
-          <a
-            href={event.form_link}
-            className="event-ticker__link"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Register →
-          </a>
-        )}
+        
+        <div className="event-ticker__actions" onClick={(e) => e.stopPropagation()}>
+          <button type="button" className="event-ticker__link-btn" onClick={onClick}>
+            Details →
+          </button>
+          {event.form_link && (
+            <a
+              href={regClosed ? undefined : event.form_link}
+              className={`event-ticker__link ${regClosed ? 'event-ticker__link--disabled' : ''}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {regClosed ? 'Closed' : 'Register →'}
+            </a>
+          )}
+        </div>
       </div>
     </article>
   );
@@ -39,6 +53,7 @@ function EventCard({ event }) {
 export default function EventsTicker() {
   const dispatch = useDispatch();
   const { upcoming: events, loadingUpcoming: loading } = useSelector((state) => state.publicEvents);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   useEffect(() => {
     dispatch(fetchPublicUpcomingEvents());
@@ -105,7 +120,7 @@ export default function EventsTicker() {
                   style={{ '--ticker-duration': `${Math.max(18, events.length * 6)}s` }}
                 >
                   {items.map((event, index) => (
-                    <EventCard key={`${event.id}-${index}`} event={event} />
+                    <EventCard key={`${event.id}-${index}`} event={event} onClick={() => setSelectedEvent(event)} />
                   ))}
                 </div>
               </div>
@@ -114,6 +129,13 @@ export default function EventsTicker() {
           )}
         </Reveal>
       </div>
+
+      {selectedEvent && (
+        <EventDetailsModal
+          event={selectedEvent}
+          onClose={() => setSelectedEvent(null)}
+        />
+      )}
     </section>
   );
 }

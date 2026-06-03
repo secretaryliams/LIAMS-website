@@ -1101,3 +1101,107 @@
   }
 }
 
+/* Premium Admin Layout Split & Forms Styles */
+.admin-two-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 2.5rem;
+  margin-top: 1.5rem;
+  align-items: start;
+}
+
+.admin-form-col {
+  background: var(--off-white);
+  padding: 1.75rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.form-row-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.form-actions-row {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.admin-preview-col {
+  position: sticky;
+  top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-header {
+  font-size: 1.25rem;
+  color: var(--navy);
+  margin-bottom: 1rem;
+  font-family: var(--font-serif);
+}
+
+.event-preview-card-wrapper {
+  perspective: 1000px;
+}
+
+.preview-card {
+  transform: none !important;
+  box-shadow: var(--shadow) !important;
+  pointer-events: none; /* Make click elements inactive in preview */
+  flex-direction: column !important;
+  min-height: auto !important;
+}
+
+.preview-card .event-card__image-container {
+  width: 100% !important;
+  height: 220px !important;
+  border-right: none !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 1rem !important;
+}
+
+.preview-card .event-card__metadata-grid {
+  grid-template-columns: 1fr !important;
+  gap: 0.75rem !important;
+}
+
+.preview-card .event-card__actions {
+  max-width: 100% !important;
+}
+
+.event-card__image-placeholder {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-alt);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+}
+
+.admin-list__date-details {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(15, 23, 42, 0.03);
+  border-radius: 6px;
+  border-left: 3px solid var(--blue);
+}
+
+@media (max-width: 1024px) {
+  .admin-two-cols {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .admin-preview-col {
+    position: static;
+  }
+}
+
+
